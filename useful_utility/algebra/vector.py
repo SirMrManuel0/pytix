@@ -184,7 +184,7 @@ class Vector2D(Vector):
 
     # Dunder Methods
     @override
-    def __copy__(self) -> "Vector":
+    def __copy__(self) -> "Vector2D":
         return Vector2D(self.get_x(), self.get_y())
 
     @override
@@ -264,3 +264,42 @@ class Vector2D(Vector):
     @override
     def __str__(self) -> str:
         return f"Vector2D x = {self.get_x()}; y = {self.get_y()}; complex = {self.get_complex()}"
+
+class Vector3D(Vector):
+    def __init__(self, x: float = 0, y: float = 0, z: float = 0) -> None:
+        super().__init__((x, y, z))
+
+    @classmethod
+    def from_vector(cls, vector: "Vector") -> "Vector3D":
+        coordinates = vector.get_coordinates()
+        x = coordinates[0] if len(coordinates) > 0 else 0
+        y = coordinates[1] if len(coordinates) > 1 else 0
+        z = coordinates[2] if len(coordinates) > 2 else 0
+        return cls(x, y, z)
+
+    def get_x(self) -> float:
+        return self.get_coordinate(0)
+
+    def get_y(self) -> float:
+        return self.get_coordinate(1)
+
+    def get_z(self) -> float:
+        return self.get_coordinate(2)
+
+    def set_x(self, x: float) -> None:
+        self.set_coordinate_at(0, x)
+
+    def set_y(self, y: float) -> None:
+        self.set_coordinate_at(1, y)
+
+    def set_z(self, z: float) -> None:
+        self.set_coordinate_at(2, z)
+
+    # Dunder Methods
+    @override
+    def __copy__(self) -> "Vector3D":
+        return Vector3D(self.get_x(), self.get_y(), self.get_z())
+
+    @override
+    def __str__(self) -> str:
+        return f"Vector3D x = {self.get_x()}; y = {self.get_y()}; z = {self.get_z()}"
