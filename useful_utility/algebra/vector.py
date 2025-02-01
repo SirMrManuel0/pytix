@@ -4,17 +4,17 @@ from typing import override
 
 import numpy as np
 
-from useful_utility.useful_exception import ArgumentError
+from useful_utility.exceptions import ArgumentException
 
 def rnd(x: float) -> float:
     return float(np.round(x, 8))
 
 class Vector:
-    def __init__(self, coords: tuple | list) -> None:
+    def __init__(self, *coords) -> None:
         if coords is None or len(coords) == 0:
-            raise ArgumentError(wrong_argument=coords, correct_argument=[0, 0])
+            raise ArgumentException(0, wrong_argument=coords, right_argument=[0, 0])
         if True in {not isinstance(i, (int, float)) for i in coords}:
-            raise ArgumentError(wrong_argument=coords, correct_argument=[0, 0])
+            raise ArgumentException(1, wrong_argument=coords, right_argument=[0, 0])
         self.__coordinates = list(coords)
 
     def get_coordinates(self) -> tuple:
@@ -22,9 +22,9 @@ class Vector:
 
     def get_coordinate(self, index: int) -> float:
         if index is None:
-            raise ArgumentError(wrong_argument=index, correct_argument=0)
+            raise ArgumentException(2, wrong_argument=index, right_argument=0)
         if index < 0 or index >= len(self.__coordinates):
-            raise ArgumentError(wrong_argument=index, correct_argument=0)
+            raise ArgumentException(3, wrong_argument=index, right_argument=0)
         return self.__coordinates[index]
 
     def get_dimension(self) -> int:
@@ -32,18 +32,18 @@ class Vector:
 
     def set_coordinates(self, coords: tuple | list) -> None:
         if coords is None or len(coords) == 0:
-            raise ArgumentError(wrong_argument=coords, correct_argument=[0, 0])
+            raise ArgumentException(4, wrong_argument=coords, right_argument=[0, 0])
         if True in {not isinstance(i, (int, float)) for i in coords}:
-            raise ArgumentError(wrong_argument=coords, correct_argument=[0, 0])
+            raise ArgumentException(5, wrong_argument=coords, right_argument=[0, 0])
         self.__coordinates = list(coords)
 
     def set_coordinate_at(self, index: int, coordinate: int | float) -> None:
         if index is None:
-            raise ArgumentError(wrong_argument=index, correct_argument=0)
+            raise ArgumentException(6, wrong_argument=index, right_argument=0)
         if coordinate is None:
-            raise ArgumentError(wrong_argument=coordinate, correct_argument=5)
+            raise ArgumentException(7, wrong_argument=coordinate, right_argument=5)
         if index < 0 or index >= len(self.__coordinates):
-            raise ArgumentError(wrong_argument=index, correct_argument=0)
+            raise ArgumentException(8, wrong_argument=index, right_argument=0)
         self.__coordinates[index] = coordinate
 
     #def get_complex(self) -> complex:
@@ -76,7 +76,7 @@ class Vector:
         other_coordinates: tuple = other.get_coordinates()
         for index, coordinate in enumerate(other_coordinates):
             new[index] += coordinate
-        return Vector(new)
+        return Vector(*new)
 
     def __iadd__(self, other: "Vector") -> "Vector":
         if not isinstance(other, Vector):
@@ -94,7 +94,7 @@ class Vector:
         other_coordinates: tuple = other.get_coordinates()
         for index, coordinate in enumerate(other_coordinates):
             new[index] -= coordinate
-        return Vector(new)
+        return Vector(*new)
 
     def __isub__(self, other: "Vector") -> "Vector":
         if not isinstance(other, Vector):
@@ -103,10 +103,10 @@ class Vector:
         self.__coordinates = list(temp.get_coordinates())
         return self
 
-    def __mul__(self, other: int | float | "Vector") -> "Vector" | float:
+    def __mul__(self, other):
         if isinstance(other, (int, float)):
             new: list = [rnd(i * other) for i in self.__coordinates]
-            return Vector(new)
+            return Vector(*new)
         elif isinstance(other, Vector):
             dot: float = 0
             other_coordinates: list = list(other.get_coordinates())
@@ -146,12 +146,17 @@ class Vector:
         self.__coordinates = list(temp.get_coordinates())
         return self
 
+    def __eq__(self, other: "Vector") -> bool:
+        return (isinstance(other, Vector)
+                and self.get_dimension() == other.get_dimension()
+                and all([self.get_coordinate(i) == other.get_coordinate(i) for i in range(self.get_dimension())]))
+
     def __str__(self) -> str:
         return f"Vector coordinates = {self.__coordinates}"
 
 class Vector2D(Vector):
     def __init__(self, x: float = 0, y: float = 0) -> None:
-        super().__init__((x, y))
+        super().__init__(x, y)
 
     @classmethod
     def from_vector(cls, vector: "Vector") -> "Vector2D":
@@ -188,17 +193,17 @@ class Vector2D(Vector):
         return Vector2D(self.get_x(), self.get_y())
 
     @override
-    def __add__(self, other: "Vector" | complex) -> "Vector":
+    def __add__(self, other) -> "Vector":
         if isinstance(other, complex):
             result: complex = self.get_complex() + other
             return Vector2D(result.real, result.imag)
         return super().__add__(other)
 
-    def __radd__(self, other: "Vector" | complex) -> "Vector":
+    def __radd__(self, other) -> "Vector":
         return self.__add__(other)
 
     @override
-    def __iadd__(self, other: "Vector" | complex) -> "Vector":
+    def __iadd__(self, other) -> "Vector":
         if isinstance(other, complex):
             temp: Vector2D = Vector2D.from_vector(self + other)
             self.set_x(temp.get_x())
@@ -207,17 +212,17 @@ class Vector2D(Vector):
         return super().__iadd__(other)
 
     @override
-    def __sub__(self, other: "Vector" | complex) -> "Vector":
+    def __sub__(self, other) -> "Vector":
         if isinstance(other, complex):
             result: complex = self.get_complex() - other
             return Vector2D(result.real, result.imag)
         return super().__sub__(other)
 
-    def __rsub__(self, other: "Vector" | complex) -> "Vector":
+    def __rsub__(self, other) -> "Vector":
         return self.__sub__(other)
 
     @override
-    def __isub__(self, other: "Vector" | complex) -> "Vector":
+    def __isub__(self, other) -> "Vector":
         if isinstance(other, complex):
             result: Vector = self - other
             self.set_x(result.get_coordinate(0))
@@ -226,14 +231,14 @@ class Vector2D(Vector):
         return super().__isub__(other)
 
     @override
-    def __mul__(self, other: complex | int | float | "Vector") -> "Vector" | float:
+    def __mul__(self, other):
         if isinstance(other, complex):
             result: complex = self.get_complex() * other
             return Vector2D(result.real, result.imag)
         return super().__mul__(other)
 
     @override
-    def __rmul__(self, other: complex | int | float | "Vector") -> "Vector":
+    def __rmul__(self, other) -> "Vector":
         return self.__mul__(other)
 
     @override
@@ -267,7 +272,7 @@ class Vector2D(Vector):
 
 class Vector3D(Vector):
     def __init__(self, x: float = 0, y: float = 0, z: float = 0) -> None:
-        super().__init__((x, y, z))
+        super().__init__(x, y, z)
 
     @classmethod
     def from_vector(cls, vector: "Vector") -> "Vector3D":
