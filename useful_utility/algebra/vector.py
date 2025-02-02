@@ -85,6 +85,9 @@ class Vector:
         self.__coordinates = list(temp.get_coordinates())
         return self
 
+    def __radd__(self, other):
+        return self + other
+
     def __sub__(self, other: "Vector") -> "Vector":
         if not isinstance(other, Vector):
             raise TypeError("Operands must be of type Vector")
@@ -114,7 +117,7 @@ class Vector:
                 self.__coordinates.append(0)
             while len(other_coordinates) < self.get_dimension():
                 other_coordinates.append(0)
-            for index, coordinate in other_coordinates:
+            for index, coordinate in enumerate(other_coordinates):
                 dot += rnd(coordinate * self.__coordinates[index])
             return dot
         else:
@@ -199,6 +202,7 @@ class Vector2D(Vector):
             return Vector2D(result.real, result.imag)
         return super().__add__(other)
 
+    @override
     def __radd__(self, other) -> "Vector":
         return self.__add__(other)
 
