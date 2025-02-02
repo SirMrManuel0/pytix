@@ -1,5 +1,5 @@
-import exceptions
-import algebra
+import useful_utility.exceptions
+import useful_utility.algebra
 
 __all__ = [
     "exceptions",
