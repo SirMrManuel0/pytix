@@ -4,7 +4,7 @@ class BaseCodes(Enum):
     NONE: int = 0
 
 class BaseError(Exception):
-    def __init__(self, code: BaseCodes, msg=""):
+    def __init__(self, code, msg=""):
         super().__init__(f"Error {code}: {msg}")
 
 class ArgumentCodes(Enum):
