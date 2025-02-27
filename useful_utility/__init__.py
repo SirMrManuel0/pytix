@@ -1,7 +1,7 @@
-import useful_utility.exceptions
+import useful_utility.errors
 import useful_utility.algebra
 
 __all__ = [
-    "exceptions",
+    "errors",
     "algebra"
 ]

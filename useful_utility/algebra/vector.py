@@ -1,47 +1,53 @@
 import math
 from typing import override
-import numpy as np
 
-from useful_utility.exceptions import ArgumentException
 
-def rnd(x: float) -> float:
-    return float(np.round(x, 8))
+from useful_utility.errors import ArgumentError, ArgumentCodes, assertion
+from useful_utility.algebra import statics
+
 
 class Vector:
     def __init__(self, *coords) -> None:
-        if coords is None or len(coords) == 0:
-            raise ArgumentException(0, wrong_argument=coords, right_argument=[0, 0])
-        if True in {not isinstance(i, (int, float)) for i in coords}:
-            raise ArgumentException(1, wrong_argument=coords, right_argument=[0, 0])
+        assertion.assert_is_not_none(coords, ArgumentError, code=ArgumentCodes.NONE,
+                                     wrong_argument=coords, right_argument=[0, 0])
+        assertion.assert_not_zero(len(coords), ArgumentError, code=ArgumentCodes.ZERO,
+                                  wrong_argument=coords, right_argument=[0, 0])
+        assertion.assert_layer_list(coords, assertion.assert_types, {"types": (int, float)}, ArgumentError,
+                                    code=ArgumentCodes.LIST_LAYER_NOT_INT_FLOAT, wrong_argument=coords, right_argument=[0, 0])
         self.__coordinates = list(coords)
 
     def get_coordinates(self) -> tuple:
         return tuple(self.__coordinates)
 
     def get_coordinate(self, index: int) -> float:
-        if index is None:
-            raise ArgumentException(2, wrong_argument=index, right_argument=0)
-        if index < 0 or index >= len(self.__coordinates):
-            raise ArgumentException(3, wrong_argument=index, right_argument=0)
+        assertion.assert_is_not_none(index, ArgumentError,
+                                     code=ArgumentCodes.NONE, wrong_argument=index, right_argument=0)
+        assertion.assert_range(index, 0, len(self.__coordinates) - 1, ArgumentError,
+                               code=ArgumentCodes.OUT_OF_RANGE, wrong_argument=index, right_argument=0)
         return self.__coordinates[index]
 
     def get_dimension(self) -> int:
         return len(self.__coordinates)
 
     def set_coordinates(self, coords: tuple | list) -> None:
-        if coords is None or len(coords) == 0:
-            raise ArgumentException(4, wrong_argument=coords, right_argument=[0, 0])
-        if True in {not isinstance(i, (int, float)) for i in coords}:
-            raise ArgumentException(5, wrong_argument=coords, right_argument=[0, 0])
+        assertion.assert_is_not_none(coords, ArgumentError,
+                                     code=ArgumentCodes.NONE, wrong_argument=coords, right_argument=[0, 0])
+        assertion.assert_not_zero(len(coords), ArgumentError,
+                                  code=ArgumentCodes.ZERO, wrong_argument=coords, right_argument=[0, 0])
+        assertion.assert_layer_list(coords, assertion.assert_types, {"types": (int, float)}, ArgumentError,
+                                    code=ArgumentCodes.LIST_LAYER_NOT_INT_FLOAT, wrong_argument=coords,
+                                    right_argument=[0, 0])
         self.__coordinates = list(coords)
 
     def set_coordinate_at(self, index: int, coordinate: int | float) -> None:
-        if index is None:
-            raise ArgumentException(6, wrong_argument=index, right_argument=0)
-        if coordinate is None:
-            raise ArgumentException(7, wrong_argument=coordinate, right_argument=5)
-        if index < 0 or index >= len(self.__coordinates):
-            raise ArgumentException(8, wrong_argument=index, right_argument=0)
+        assertion.assert_is_not_none(index, ArgumentError,
+                                     code=ArgumentCodes.NONE, wrong_argument=index, right_argument=0)
+        assertion.assert_range(index, 0, len(self.__coordinates) - 1, ArgumentError,
+                               code=ArgumentCodes.OUT_OF_RANGE, wrong_argument=index, right_argument=0)
+        assertion.assert_types(coordinate, (float, int), ArgumentError,
+                               code=ArgumentCodes.NOT_INT_FLOAT, wrong_argument=coordinate, right_argument=5)
+        assertion.assert_is_not_none(coordinate, ArgumentError,
+                                     code=ArgumentCodes.NONE, wrong_argument=coordinate, right_argument=5)
         self.__coordinates[index] = coordinate
 
     #def get_complex(self) -> complex:
@@ -51,7 +57,7 @@ class Vector:
         count: float = 0
         for coordinate in self.__coordinates:
             count += coordinate * coordinate
-        count: float = rnd(count ** (1/self.get_dimension()))
+        count: float = statics.rnd(count ** (1/self.get_dimension()))
         return count
 
     #def angle(self, vec2: "Vector") -> float:
@@ -106,7 +112,7 @@ class Vector:
 
     def __mul__(self, other):
         if isinstance(other, (int, float)):
-            new: list = [rnd(i * other) for i in self.__coordinates]
+            new: list = [statics.rnd(i * other) for i in self.__coordinates]
             return Vector(*new)
         elif isinstance(other, Vector):
             dot: float = 0
@@ -116,7 +122,7 @@ class Vector:
             while len(other_coordinates) < self.get_dimension():
                 other_coordinates.append(0)
             for index, coordinate in enumerate(other_coordinates):
-                dot += rnd(coordinate * self.__coordinates[index])
+                dot += statics.rnd(coordinate * self.__coordinates[index])
             return dot
         else:
             raise TypeError("The operand must be a scalar (int/float) or Vector")
@@ -170,7 +176,7 @@ class Vector2D(Vector):
         dot: float = self * vec2
         length_self: float = self.length()
         length_vec2: float = vec2.length()
-        angle: float = rnd(dot / (length_self * length_vec2))
+        angle: float = statics.rnd(dot / (length_self * length_vec2))
         return math.acos(angle)
 
     def get_complex(self) -> complex:

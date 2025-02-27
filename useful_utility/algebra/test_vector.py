@@ -1,12 +1,13 @@
 import unittest
 
-from .vector import *
-from useful_utility.exceptions import ArgumentException
+from useful_utility.algebra.vector import *
+from useful_utility.algebra.statics import rnd
+from useful_utility.errors import ArgumentError
 
 class TestVector(unittest.TestCase):
     def test_init(self):
         Vector(5, 5, 5, 5)
-        with self.assertRaises(ArgumentException):
+        with self.assertRaises(ArgumentError):
             Vector()
             Vector(5, 5, None)
             Vector(5, 5, "5")
@@ -109,7 +110,7 @@ class TestVector(unittest.TestCase):
 class TestVector2D(unittest.TestCase):
     def test_init(self):
         Vector2D(1, 1)
-        with self.assertRaises(ArgumentException):
+        with self.assertRaises(ArgumentError):
             Vector2D(1, None)
             Vector2D(1, "0")
             Vector2D("0", 0)
@@ -196,7 +197,7 @@ class TestVector2D(unittest.TestCase):
 class TestVector3D(unittest.TestCase):
     def test_init(self):
         Vector3D(1, 1, 1)
-        with self.assertRaises(ArgumentException):
+        with self.assertRaises(ArgumentError):
             Vector3D(1, None, 1)
             Vector3D("5")
             Vector3D(None)
