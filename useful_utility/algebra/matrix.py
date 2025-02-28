@@ -160,6 +160,13 @@ class Matrix:
     def copy(self):
         return Matrix(data=list(self.get_components()))
 
+    @classmethod
+    def create_identity_matrix(cls, n: int = 2):
+        identity_matrix: np.ndarray = np.zeros(shape=(n, n))
+        for i in range(len(identity_matrix)):
+            identity_matrix[i][i] = 1
+        return QuadraticMatrix(data=list(identity_matrix))
+
     def __eq__(self, other):
         if isinstance(other, Matrix):
             if self.get_rows() != other.get_rows() and self.get_columns() != other.get_columns():
@@ -298,9 +305,10 @@ class Matrix:
     def __truediv__(self, other):
         assertion.assert_types(other, (int, float), MathError,
                                code=MathCodes.NOT_INT_FLOAT)
+        assertion.assert_not_zero(other, MathError, code=MathCodes.ZERO, msg="Division by Zero is not defined.")
         return self * (1/other)
 
-    def __idiv__(self, other):
+    def __itruediv__(self, other):
         assertion.assert_types(other, (int, float), MathError,
                                code=MathCodes.NOT_INT_FLOAT)
         dived: Matrix = self / other
@@ -321,6 +329,9 @@ class Matrix:
         self.set_components(multiplied.get_components())
         return self
 
+    def __str__(self):
+        return f"{self._data}"
+
 class QuadraticMatrix(Matrix):
     def __init__(self, n: int = 2, data: list = None):
         if data is not None and len(data) > 0:
@@ -334,13 +345,6 @@ class QuadraticMatrix(Matrix):
         assertion.assert_equals(matrix.get_rows(), matrix.get_columns(), ArgumentError,
                                 code=ArgumentCodes.NOT_EQUAL)
         return QuadraticMatrix(data=list(matrix.get_components()))
-
-    @classmethod
-    def create_identity_matrix(cls, n: int = 2):
-        identity_matrix: np.ndarray = np.zeros(shape=(n, n))
-        for i in range(len(identity_matrix)):
-            identity_matrix[i][i] = 1
-        return QuadraticMatrix(data=list(identity_matrix))
 
     def get_invers(self):
         if np.linalg.det(self.get_components()) != 0:
@@ -392,12 +396,18 @@ class QuadraticMatrix(Matrix):
         else:
             return multi
 
+    @override
     def __truediv__(self, other):
         div: Matrix = super().__truediv__(other)
         return QuadraticMatrix.from_matrix(div)
 
+    @override
     def __pow__(self, power, modulo=None):
         if power == -1:
             return self.get_invers()
         powered: Matrix = super().__pow__(power, modulo)
         return QuadraticMatrix.from_matrix(powered)
+
+    @override
+    def copy(self):
+        return QuadraticMatrix.from_matrix(super().copy())

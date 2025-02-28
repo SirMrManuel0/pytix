@@ -4,17 +4,17 @@ def assert_type(var, type_, exception, **kwargs) -> None:
         raise exception(**kwargs)
 
 
-def assert_range(var: float | int, start: float | int, end: float | int, exception, **kwargs) -> None:
+def assert_range(var, start, end, exception, **kwargs) -> None:
     if var < start or var > end:
         raise exception(**kwargs)
 
 
-def assert_below(var: float | int, max_: int | float, exception, **kwargs) -> None:
+def assert_below(var, max_, exception, **kwargs) -> None:
     if var >= max_:
         raise exception(**kwargs)
 
 
-def assert_above(var: float | int, min_: int | float, exception, **kwargs) -> None:
+def assert_above(var, min_, exception, **kwargs) -> None:
     if var <= min_:
         raise exception(**kwargs)
 
@@ -23,19 +23,19 @@ def assert_equals(var, equaled, exception, **kwargs) -> None:
     if var != equaled:
         raise exception(**kwargs)
 
-def assert_type_list(var: list | tuple | set, type_, exception, **kwargs) -> None:
+def assert_type_list(var, type_, exception, **kwargs) -> None:
     if any([not isinstance(i, type_) for i in var]):
         raise exception(**kwargs)
 
-def assert_is_positiv(var: int | float, exception, **kwargs) -> None:
+def assert_is_positiv(var, exception, **kwargs) -> None:
     if var < 0:
         raise exception(**kwargs)
 
-def assert_is_negative(var: int | float, exception, **kwargs) -> None:
+def assert_is_negative(var, exception, **kwargs) -> None:
     if var > 0:
         raise exception(**kwargs)
 
-def assert_not_zero(var: int | float, exception, **kwargs) -> None:
+def assert_not_zero(var, exception, **kwargs) -> None:
     if var == 0:
         raise exception(**kwargs)
 
@@ -65,3 +65,7 @@ def assert_false(var: bool, exception, **kwargs) -> None:
 def assert_true(var: bool, exception, **kwargs) -> None:
     if not var:
         exception(**kwargs)
+
+def assert_types_list(var, types: tuple, exception, **kwargs) -> None:
+    for element in var:
+        assert_types(element, types, exception, **kwargs)

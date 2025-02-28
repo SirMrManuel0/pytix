@@ -2,6 +2,7 @@ from enum import Enum
 
 class BaseCodes(Enum):
     NONE: int = 0
+    TODO: int = 1
 
 class BaseError(Exception):
     def __init__(self, code, msg=""):
@@ -19,6 +20,9 @@ class ArgumentCodes(Enum):
     LIST_LAYER_NOT_INT_FLOAT_LIST_ND_ARRAY: int = 8
     NOT_MATRIX_NP_ARRAY: int = 9
     NOT_EQUAL: int = 10
+    MISMATCH_DIMENSION: int = 11
+    NOT_TUPLE_LIST_ND_ARRAY: int = 12
+    NOT_FLOAT: int = 13
 
 # current max: 21
 class ArgumentError(BaseError):
@@ -43,6 +47,9 @@ class MathCodes(Enum):
     NOT_FALSE: int = 5
     NOT_POSITIV: int = 6
     NOT_INT: int = 7
+    NOT_VECTOR: int = 8
+    NOT_DEFINED: int = 9
+    ZERO: int = 10
 
 # current max: 1
 class MathError(BaseError):
@@ -57,3 +64,8 @@ class MathError(BaseError):
         self.right_argument = right_argument
         self.msg = msg
         super().__init__(code, msg)
+
+def TODO(func):
+    def wrapper(*args, **kwargs):
+        raise BaseError(BaseCodes.TODO, "This function has yet to be fully or partially implemted!")
+    return wrapper
