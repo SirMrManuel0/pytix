@@ -3,7 +3,6 @@ from typing import override
 import numpy as np
 
 from useful_utility.errors import ArgumentError, MathError, ArgumentCodes, assertion, MathCodes
-from useful_utility.algebra.statics import rnd
 
 def add_matrix(A, B):
     return [[A[i][j] + B[i][j] for j in range(len(A))] for i in range(len(A))]
@@ -211,7 +210,8 @@ class Matrix:
         return Matrix(self._columns, self._rows, data=list(matrixA - matrixB))
 
     def __rsub__(self, other):
-        return self.__sub__(other)
+        assertion.assert_type(other, Matrix, MathError, code=MathCodes.NOT_MATRIX)
+        return other - self
 
     def __isub__(self, other):
         temp: Matrix = self - other
@@ -320,3 +320,84 @@ class Matrix:
         multiplied: Matrix = self ** other
         self.set_components(multiplied.get_components())
         return self
+
+class QuadraticMatrix(Matrix):
+    def __init__(self, n: int = 2, data: list = None):
+        if data is not None and len(data) > 0:
+            for i in range(len(data)):
+                assertion.assert_equals(len(data), len(data[i]), ArgumentError,
+                                        code=ArgumentCodes.NOT_EQUAL)
+        super().__init__(n, n, data)
+
+    @classmethod
+    def from_matrix(cls, matrix: Matrix):
+        assertion.assert_equals(matrix.get_rows(), matrix.get_columns(), ArgumentError,
+                                code=ArgumentCodes.NOT_EQUAL)
+        return QuadraticMatrix(data=list(matrix.get_components()))
+
+    @classmethod
+    def create_identity_matrix(cls, n: int = 2):
+        identity_matrix: np.ndarray = np.zeros(shape=(n, n))
+        for i in range(len(identity_matrix)):
+            identity_matrix[i][i] = 1
+        return QuadraticMatrix(data=list(identity_matrix))
+
+    def get_invers(self):
+        if np.linalg.det(self.get_components()) != 0:
+            invers: np.ndarray = np.linalg.inv(self.get_components())
+            return QuadraticMatrix(data=list(invers))
+        return
+
+    @override
+    def set_components(self, data: list | np.ndarray) -> None:
+        if data is not None and len(data) > 0:
+            for i in range(len(data)):
+                assertion.assert_equals(len(data), len(data[i]), ArgumentError,
+                                        code=ArgumentCodes.NOT_EQUAL)
+        super().set_components(data)
+
+    @override
+    def __add__(self, other):
+        added: Matrix = super().__add__(other)
+        return QuadraticMatrix.from_matrix(added)
+
+    @override
+    def __radd__(self, other):
+        added: Matrix = super().__radd__(other)
+        return QuadraticMatrix.from_matrix(added)
+
+    @override
+    def __sub__(self, other):
+        sub: Matrix = super().__sub__(other)
+        return QuadraticMatrix.from_matrix(sub)
+
+    @override
+    def __rsub__(self, other):
+        sub: Matrix = super().__rsub__(other)
+        return QuadraticMatrix.from_matrix(sub)
+
+    @override
+    def __mul__(self, other):
+        multi: Matrix = super().__mul__(other)
+        if multi.get_rows() == multi.get_columns():
+            return QuadraticMatrix.from_matrix(multi)
+        else:
+            return multi
+
+    @override
+    def __rmul__(self, other):
+        multi: Matrix = super().__rmul__(other)
+        if multi.get_rows() == multi.get_columns():
+            return QuadraticMatrix.from_matrix(multi)
+        else:
+            return multi
+
+    def __truediv__(self, other):
+        div: Matrix = super().__truediv__(other)
+        return QuadraticMatrix.from_matrix(div)
+
+    def __pow__(self, power, modulo=None):
+        if power == -1:
+            return self.get_invers()
+        powered: Matrix = super().__pow__(power, modulo)
+        return QuadraticMatrix.from_matrix(powered)

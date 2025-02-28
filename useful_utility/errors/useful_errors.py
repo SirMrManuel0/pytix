@@ -18,6 +18,7 @@ class ArgumentCodes(Enum):
     NOT_POSITIV: int = 7
     LIST_LAYER_NOT_INT_FLOAT_LIST_ND_ARRAY: int = 8
     NOT_MATRIX_NP_ARRAY: int = 9
+    NOT_EQUAL: int = 10
 
 # current max: 21
 class ArgumentError(BaseError):
