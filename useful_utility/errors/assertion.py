@@ -57,3 +57,11 @@ def assert_is_not_none(var, exception, **kwargs) -> None:
 def assert_layer_list(var, assert_, arg: dict, exception, **kwargs) -> None:
     for element in var:
         assert_(element, **arg, exception=exception, **kwargs)
+
+def assert_false(var: bool, exception, **kwargs) -> None:
+    if var:
+        exception(**kwargs)
+
+def assert_true(var: bool, exception, **kwargs) -> None:
+    if not var:
+        exception(**kwargs)

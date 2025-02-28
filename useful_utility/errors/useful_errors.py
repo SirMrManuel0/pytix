@@ -16,7 +16,7 @@ class ArgumentCodes(Enum):
     NOT_INT: int = 5
     NOT_LIST_NP_ARRAY: int = 6
     NOT_POSITIV: int = 7
-    LIST_LAYER_NOT_INT_FLOAT_LIST: int = 8
+    LIST_LAYER_NOT_INT_FLOAT_LIST_ND_ARRAY: int = 8
     NOT_MATRIX_NP_ARRAY: int = 9
 
 # current max: 21
@@ -36,6 +36,12 @@ class ArgumentError(BaseError):
 class MathCodes(Enum):
     NONE: int = 0
     UNFIT_DIMENSIONS: int = 1
+    NOT_MATRIX: int = 2
+    NOT_MATRIX_INT_FLOAT: int = 3
+    NOT_INT_FLOAT: int = 4
+    NOT_FALSE: int = 5
+    NOT_POSITIV: int = 6
+    NOT_INT: int = 7
 
 # current max: 1
 class MathError(BaseError):
