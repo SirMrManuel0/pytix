@@ -1,5 +1,17 @@
 from enum import Enum
 
+import numpy as np
+
+
+class Types(Enum):
+    INT: tuple = (int, np.integer)
+    FLOAT: tuple = (float, np.floating)
+    NUMBER: tuple = (*INT, *FLOAT)
+    LIST: tuple = (list,)
+    TUPLE: tuple = (tuple,)
+    ND_ARRAY: tuple = (np.ndarray,)
+    LISTS: tuple = (*LIST, *ND_ARRAY)
+
 class BaseCodes(Enum):
     NONE: int = 0
     TODO: int = 1
@@ -11,18 +23,19 @@ class BaseError(Exception):
 class ArgumentCodes(Enum):
     NONE: int = 0
     ZERO: int = 1
-    LIST_LAYER_NOT_INT_FLOAT: int = 2
+    LIST_LAYER_NOT_NUMBER: int = 2
     OUT_OF_RANGE: int = 3
-    NOT_INT_FLOAT: int = 4
+    NOT_NUMBER: int = 4
     NOT_INT: int = 5
-    NOT_LIST_NP_ARRAY: int = 6
+    NOT_LISTS: int = 6
     NOT_POSITIV: int = 7
-    LIST_LAYER_NOT_INT_FLOAT_LIST_ND_ARRAY: int = 8
+    LIST_LAYER_NOT_NUMBER_LISTS: int = 8
     NOT_MATRIX_NP_ARRAY: int = 9
     NOT_EQUAL: int = 10
     MISMATCH_DIMENSION: int = 11
     NOT_TUPLE_LIST_ND_ARRAY: int = 12
     NOT_FLOAT: int = 13
+    UNEXPECTED_TYPE: int = 14
 
 # current max: 21
 class ArgumentError(BaseError):
@@ -42,14 +55,16 @@ class MathCodes(Enum):
     NONE: int = 0
     UNFIT_DIMENSIONS: int = 1
     NOT_MATRIX: int = 2
-    NOT_MATRIX_INT_FLOAT: int = 3
-    NOT_INT_FLOAT: int = 4
+    NOT_MATRIX_NUMBER: int = 3
+    NOT_NUMBER: int = 4
     NOT_FALSE: int = 5
     NOT_POSITIV: int = 6
     NOT_INT: int = 7
     NOT_VECTOR: int = 8
     NOT_DEFINED: int = 9
     ZERO: int = 10
+    NOT_VECTOR_NUMBER: int = 11
+    VECTOR: int = 12
 
 # current max: 1
 class MathError(BaseError):

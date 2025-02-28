@@ -2,7 +2,7 @@ from typing import override
 
 import numpy as np
 
-from useful_utility.errors import ArgumentError, MathError, ArgumentCodes, assertion, MathCodes
+from useful_utility.errors import ArgumentError, MathError, ArgumentCodes, assertion, MathCodes, Types
 
 def add_matrix(A, B):
     return [[A[i][j] + B[i][j] for j in range(len(A))] for i in range(len(A))]
@@ -68,28 +68,28 @@ class Matrix:
         if data is None:
             data = np.zeros(shape=(2, 2))
             default_data = True
-        assertion.assert_type(rows, int, ArgumentError, code=ArgumentCodes.NOT_INT)
-        assertion.assert_type(columns, int, ArgumentError, code=ArgumentCodes.NOT_INT)
-        assertion.assert_types(data, (list, np.ndarray), ArgumentError, code=ArgumentCodes.NOT_LIST_NP_ARRAY)
+        assertion.assert_types(rows, (int,), ArgumentError, code=ArgumentCodes.NOT_INT)
+        assertion.assert_types(columns, (int,), ArgumentError, code=ArgumentCodes.NOT_INT)
+        assertion.assert_types(data, Types.LISTS.value, ArgumentError, code=ArgumentCodes.NOT_LISTS)
         assertion.assert_is_positiv(rows, ArgumentError, code=ArgumentCodes.NOT_POSITIV)
         assertion.assert_is_positiv(columns, ArgumentError, code=ArgumentCodes.NOT_POSITIV)
         assertion.assert_not_zero(columns, ArgumentError, code=ArgumentCodes.ZERO)
         assertion.assert_not_zero(rows, ArgumentError, code=ArgumentCodes.ZERO)
         if len(data) > 0:
             assertion.assert_layer_list(data, assertion.assert_types,
-                                        {"types": (int, float, list, np.ndarray)}, ArgumentError,
-                                        code=ArgumentCodes.LIST_LAYER_NOT_INT_FLOAT_LIST_ND_ARRAY)
-        if len(data) > 0 and (isinstance(data[0], list) or isinstance(data[0], np.ndarray)):
+                                        {"types": (*Types.NUMBER.value, *Types.LISTS.value)}, ArgumentError,
+                                        code=ArgumentCodes.LIST_LAYER_NOT_NUMBER_LISTS)
+        if len(data) > 0 and isinstance(data[0], Types.LISTS.value):
             for d in data:
-                assertion.assert_types(d, (list, np.ndarray), ArgumentError,
-                                       code=ArgumentCodes.NOT_LIST_NP_ARRAY)
+                assertion.assert_types(d, Types.LISTS.value, ArgumentError,
+                                       code=ArgumentCodes.NOT_LISTS)
                 assertion.assert_layer_list(d, assertion.assert_types,
-                                            {"types": (int, float)}, ArgumentError,
-                                            code=ArgumentCodes.LIST_LAYER_NOT_INT_FLOAT)
-        if len(data) > 0 and (isinstance(data[0], int) or isinstance(data[0], float)):
+                                            {"types": Types.NUMBER.value}, ArgumentError,
+                                            code=ArgumentCodes.LIST_LAYER_NOT_NUMBER)
+        if len(data) > 0 and isinstance(data[0], Types.NUMBER.value):
             for d in data:
-                assertion.assert_types(d, (int, float), ArgumentError,
-                                       code=ArgumentCodes.NOT_INT_FLOAT)
+                assertion.assert_types(d, Types.NUMBER.value, ArgumentError,
+                                       code=ArgumentCodes.NOT_NUMBER)
 
         self._rows: int = rows
         self._columns: int = columns
@@ -118,7 +118,7 @@ class Matrix:
     def get_dimension(self) -> tuple:
         return self._columns, self._rows
 
-    def get_component(self, column: int, row: int) -> float:
+    def get_component(self, column: int, row: int):
         assertion.assert_range(column, 0, len(self._data) - 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
         assertion.assert_range(row, 0, len(self._data[column]) - 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
         return float(self._data[column][row])
@@ -132,23 +132,23 @@ class Matrix:
         return self._data.copy()
 
     def set_components(self, data: list | np.ndarray) -> None:
-        assertion.assert_types(data, (list, tuple, np.ndarray), ArgumentError,
-                               code=ArgumentCodes.NOT_LIST_NP_ARRAY)
+        assertion.assert_types(data, Types.LISTS.value, ArgumentError,
+                               code=ArgumentCodes.NOT_LISTS)
         if len(data) > 0:
             assertion.assert_layer_list(data, assertion.assert_types,
-                                        {"types": (int, float, list, np.ndarray)}, ArgumentError,
-                                        code=ArgumentCodes.LIST_LAYER_NOT_INT_FLOAT_LIST_ND_ARRAY)
+                                        {"types": (*Types.NUMBER.value, *Types.LISTS.value)}, ArgumentError,
+                                        code=ArgumentCodes.LIST_LAYER_NOT_NUMBER_LISTS)
         if len(data) > 0 and (isinstance(data[0], list) or isinstance(data[0], np.ndarray)):
             for d in data:
-                assertion.assert_types(d, (list, np.ndarray), ArgumentError,
-                                       code=ArgumentCodes.NOT_LIST_NP_ARRAY)
+                assertion.assert_types(d, Types.LISTS.value, ArgumentError,
+                                       code=ArgumentCodes.NOT_LISTS)
                 assertion.assert_layer_list(d, assertion.assert_types,
-                                            {"types": (int, float)}, ArgumentError,
-                                            code=ArgumentCodes.LIST_LAYER_NOT_INT_FLOAT)
-        if len(data) > 0 and (isinstance(data[0], int) or isinstance(data[0], float)):
+                                            {"types": Types.NUMBER.value}, ArgumentError,
+                                            code=ArgumentCodes.LIST_LAYER_NOT_NUMBER)
+        if len(data) > 0 and isinstance(data[0], Types.NUMBER.value):
             for d in data:
-                assertion.assert_types(d, (int, float), ArgumentError,
-                                       code=ArgumentCodes.NOT_INT_FLOAT)
+                assertion.assert_types(d, Types.NUMBER.value, ArgumentError,
+                                       code=ArgumentCodes.NOT_NUMBER)
         if len(data) != self._columns:
             self._columns = len(data)
         if len(data) > 0 and len(data[0]) != self._rows:
@@ -226,7 +226,7 @@ class Matrix:
         return self
 
     def __mul__(self, other):
-        assertion.assert_types(other, (Matrix, int, float), MathError, code=MathCodes.NOT_MATRIX_INT_FLOAT,
+        assertion.assert_types(other, (Matrix, *Types.NUMBER.value), MathError, code=MathCodes.NOT_MATRIX_NUMBER,
                                msg="Only matrices, int, float can be multiplied to a matrix.")
         multiplied: Matrix = Matrix()
 
@@ -244,7 +244,7 @@ class Matrix:
                 c: list = matrix_multiply_opt(a, b)
             multiplied.set_components(c)
 
-        if isinstance(other, int) or isinstance(other, float):
+        if isinstance(other, Types.NUMBER.value):
             temp: list = list()
             if self._rows > 1:
                 for column_index, column in enumerate(self._data):
@@ -258,7 +258,7 @@ class Matrix:
         return multiplied
 
     def __rmul__(self, other):
-        assertion.assert_types(other, (Matrix, int, float), MathError, code=MathCodes.NOT_MATRIX_INT_FLOAT,
+        assertion.assert_types(other, (Matrix, *Types.NUMBER.value), MathError, code=MathCodes.NOT_MATRIX_NUMBER,
                                msg="Only matrices, int, float can be multiplied to a matrix.")
         multiplied: Matrix = Matrix()
 
@@ -276,7 +276,7 @@ class Matrix:
                 c: list = matrix_multiply_opt(a, b)
             multiplied.set_components(c)
 
-        if isinstance(other, int) or isinstance(other, float):
+        if isinstance(other, Types.NUMBER.value):
             temp: list = list()
             if self._rows > 1:
                 for column_index, column in enumerate(self._data):
@@ -290,27 +290,27 @@ class Matrix:
         return multiplied
 
     def __imul__(self, other):
-        assertion.assert_types(other, (Matrix, int, float), MathError, code=MathCodes.NOT_MATRIX_INT_FLOAT,
+        assertion.assert_types(other, (Matrix, *Types.NUMBER.value), MathError, code=MathCodes.NOT_MATRIX_NUMBER,
                                msg="Only matrices, int, float can be multiplied to a matrix.")
 
         if isinstance(other, Matrix):
             multiplied: Matrix = self * other
             self.set_components(multiplied.get_components())
 
-        if isinstance(other, int) or isinstance(other, float):
+        if isinstance(other, Types.NUMBER.value):
             multiplied: Matrix = self * other
             self.set_components(multiplied.get_components())
         return self
 
     def __truediv__(self, other):
-        assertion.assert_types(other, (int, float), MathError,
-                               code=MathCodes.NOT_INT_FLOAT)
+        assertion.assert_types(other, Types.NUMBER.value, MathError,
+                               code=MathCodes.NOT_NUMBER)
         assertion.assert_not_zero(other, MathError, code=MathCodes.ZERO, msg="Division by Zero is not defined.")
         return self * (1/other)
 
     def __itruediv__(self, other):
-        assertion.assert_types(other, (int, float), MathError,
-                               code=MathCodes.NOT_INT_FLOAT)
+        assertion.assert_types(other, Types.NUMBER.value, MathError,
+                               code=MathCodes.NOT_NUMBER)
         dived: Matrix = self / other
         self.set_components(dived.get_components())
         return self
@@ -318,7 +318,7 @@ class Matrix:
     def __pow__(self, power, modulo=None):
         assertion.assert_false(modulo, MathCodes, code=MathCodes.NOT_FALSE, msg="Modulo not defined.")
         assertion.assert_is_positiv(power, MathError, code=MathCodes.NOT_POSITIV)
-        assertion.assert_type(power, int, MathError, code=MathCodes.NOT_INT)
+        assertion.assert_types(power, Types.INT.value, MathError, code=MathCodes.NOT_INT)
         multiplied: Matrix = self.copy()
         for _ in range(power):
             multiplied *= self

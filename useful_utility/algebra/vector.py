@@ -3,13 +3,21 @@ from typing import override
 import numpy as np
 
 from useful_utility.errors import ArgumentError, MathError, assertion
-from useful_utility.errors import ArgumentCodes,  MathCodes, TODO
+from useful_utility.errors import ArgumentCodes,  MathCodes, TODO, Types
 from useful_utility.algebra.matrix import Matrix
 
 
 class Vector(Matrix):
     def __init__(self, dimension: int = 2, *coords):
-        super().__init__(dimension, 1, data=list(coords))
+        d: list = list()
+        for coord in coords:
+            if isinstance(coord, Types.NUMBER.value):
+                d.append([coord])
+            elif isinstance(coord, Types.LISTS.value):
+                d.append([coord[0]])
+            else:
+                raise ArgumentError(ArgumentCodes.UNEXPECTED_TYPE)
+        super().__init__(dimension, 1, data=d)
 
     @classmethod
     def from_matrix(cls, matrix: Matrix):
@@ -31,13 +39,13 @@ class Vector(Matrix):
         return float(self._data[index][0])
 
     @override
-    def set_component(self, index: int, value: int | float | np.float64) -> None:
+    def set_component(self, index: int, value) -> None:
         super().set_component(index, 1, value)
 
-    def set_data(self, new: tuple | list | np.ndarray) -> None:
-        assertion.assert_types(new, (tuple, list, np.ndarray), ArgumentError,
-                               code=ArgumentCodes.NOT_TUPLE_LIST_ND_ARRAY)
-        assertion.assert_types_list(new, (int, float), ArgumentError, code=ArgumentCodes.NOT_INT_FLOAT)
+    def set_data(self, new: list | np.ndarray) -> None:
+        assertion.assert_types(new, Types.LISTS.value, ArgumentError,
+                               code=ArgumentCodes.NOT_LISTS)
+        assertion.assert_types_list(new, Types.NUMBER.value, ArgumentError, code=ArgumentCodes.NOT_NUMBER)
         new: list = list(new)
         to_data: list = list()
         for a in new:
@@ -76,20 +84,25 @@ class Vector(Matrix):
         return Vector.from_matrix(sub)
 
     @override
-    def __mul__(self, other) -> float | int:
-        assertion.assert_type(other, Vector, MathError, code=MathCodes.NOT_VECTOR)
-        assertion.assert_equals(self.get_dimension(), other.get_dimension(), MathError, code=MathCodes.UNFIT_DIMENSIONS)
-        a: np.ndarray = self.get_components()
-        b: np.ndarray = other.get_components()
-        c: np.ndarray = a * b
-        d: float | int = 0
-        if len(c) > 0 and isinstance(c[0], list):
-            for sub in c:
-                d += sub[0]
-        elif len(c) > 0 and (isinstance(c[0], float) or isinstance(c[0], int)):
-            for n in c:
-                d += n
-        return d
+    def __mul__(self, other):
+        assertion.assert_types(other, (Vector, *Types.NUMBER.value), MathError, code=MathCodes.NOT_VECTOR_NUMBER)
+        if isinstance(other, Vector):
+            assertion.assert_equals(self.get_dimension(), other.get_dimension(), MathError,
+                                    code=MathCodes.UNFIT_DIMENSIONS)
+            a: np.ndarray = self.get_components()
+            b: np.ndarray = other.get_components()
+            c: np.ndarray = a * b
+            d: float | int = 0
+            if len(c) > 0 and isinstance(c[0], Types.LISTS.value):
+                for sub in c:
+                    d += sub[0]
+            elif len(c) > 0 and isinstance(c[0], Types.NUMBER.value):
+                print(c)
+                for n in c:
+                    d += n
+            return d
+        vector: np.ndarray = self.get_data()
+        return Vector(self.get_dimension(), *list(vector * other))
 
     @override
     def __rmul__(self, other):
@@ -97,6 +110,12 @@ class Vector(Matrix):
             return self * other
         multiple: Matrix = super().__rmul__(other)
         return Vector.from_matrix(multiple)
+
+    @override
+    def __imul__(self, other):
+        if isinstance(other, Vector):
+            raise MathError(MathCodes.VECTOR)
+        return super().__imul__(other)
 
     @override
     def __truediv__(self, other):
