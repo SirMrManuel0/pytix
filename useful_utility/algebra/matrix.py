@@ -63,7 +63,7 @@ def matrix_multiply_opt(A, B):
 
 
 class Matrix:
-    def __init__(self, columns: int = 2, rows: int = 2, data: list = None):
+    def __init__(self, data: list = None, columns: int = 2, rows: int = 2):
         default_data: bool = False
         if data is None:
             data = np.zeros(shape=(2, 2))
@@ -90,6 +90,10 @@ class Matrix:
             for d in data:
                 assertion.assert_types(d, Types.NUMBER.value, ArgumentError,
                                        code=ArgumentCodes.NOT_NUMBER)
+            copy_ = list()
+            for d in data:
+                copy_.append([d])
+            data = copy_
 
         self._rows: int = rows
         self._columns: int = columns
@@ -138,7 +142,7 @@ class Matrix:
             assertion.assert_layer_list(data, assertion.assert_types,
                                         {"types": (*Types.NUMBER.value, *Types.LISTS.value)}, ArgumentError,
                                         code=ArgumentCodes.LIST_LAYER_NOT_NUMBER_LISTS)
-        if len(data) > 0 and (isinstance(data[0], list) or isinstance(data[0], np.ndarray)):
+        if len(data) > 0 and isinstance(data[0], Types.LISTS.value):
             for d in data:
                 assertion.assert_types(d, Types.LISTS.value, ArgumentError,
                                        code=ArgumentCodes.NOT_LISTS)
@@ -149,6 +153,10 @@ class Matrix:
             for d in data:
                 assertion.assert_types(d, Types.NUMBER.value, ArgumentError,
                                        code=ArgumentCodes.NOT_NUMBER)
+            copy_ = list()
+            for d in data:
+                copy_.append([d])
+            data = copy_
         if len(data) != self._columns:
             self._columns = len(data)
         if len(data) > 0 and len(data[0]) != self._rows:
@@ -162,6 +170,8 @@ class Matrix:
 
     @classmethod
     def create_identity_matrix(cls, n: int = 2):
+        assertion.assert_types(n, Types.INT.value, ArgumentError,
+                               code=ArgumentCodes.NOT_INT)
         identity_matrix: np.ndarray = np.zeros(shape=(n, n))
         for i in range(len(identity_matrix)):
             identity_matrix[i][i] = 1
@@ -184,7 +194,8 @@ class Matrix:
             for column in bools:
                 fin.append(all(column))
             return all(fin)
-        raise ArgumentError(ArgumentCodes.NOT_MATRIX_NP_ARRAY, msg="Only matrices or np.ndarray can be compared.", wrong_argument=type(other))
+        raise ArgumentError(ArgumentCodes.NOT_MATRIX_NP_ARRAY,
+                            msg="Only matrices or np.ndarray can be compared.", wrong_argument=type(other))
 
     def __add__(self, other) -> "Matrix":
         assertion.assert_type(other, Matrix, MathError, code=MathCodes.NOT_MATRIX,
@@ -193,7 +204,7 @@ class Matrix:
             raise MathError(MathCodes.UNFIT_DIMENSIONS, "The dimensions of the matrices do not fit!", other)
         matrixA = self.get_components()
         matrixB = other.get_components()
-        return Matrix(self._columns, self._rows, data=list(matrixA + matrixB))
+        return Matrix(list(matrixA + matrixB), self._columns, self._rows)
 
     def __radd__(self, other):
         return self.__add__(other)
@@ -214,7 +225,7 @@ class Matrix:
             raise MathError(MathCodes.UNFIT_DIMENSIONS, "The dimensions of the matrices do not fit!", other)
         matrixA = self.get_components()
         matrixB = other.get_components()
-        return Matrix(self._columns, self._rows, data=list(matrixA - matrixB))
+        return Matrix(list(matrixA - matrixB), self._columns, self._rows)
 
     def __rsub__(self, other):
         assertion.assert_type(other, Matrix, MathError, code=MathCodes.NOT_MATRIX)
@@ -333,12 +344,12 @@ class Matrix:
         return f"{self._data}"
 
 class QuadraticMatrix(Matrix):
-    def __init__(self, n: int = 2, data: list = None):
+    def __init__(self, data: list = None, n: int = 2):
         if data is not None and len(data) > 0:
             for i in range(len(data)):
                 assertion.assert_equals(len(data), len(data[i]), ArgumentError,
                                         code=ArgumentCodes.NOT_EQUAL)
-        super().__init__(n, n, data)
+        super().__init__(data, n, n)
 
     @classmethod
     def from_matrix(cls, matrix: Matrix):

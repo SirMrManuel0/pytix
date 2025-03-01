@@ -17,8 +17,15 @@ class BaseCodes(Enum):
     TODO: int = 1
 
 class BaseError(Exception):
-    def __init__(self, code, msg=""):
-        super().__init__(f"Error {code}: {msg}")
+    def __init__(self, code, msg="", wrong=None, right=None, err: str = "Error"):
+        if wrong is not None:
+            msg += f"\nWrong: {wrong}"
+        if right is not None:
+            msg += f"\nRight (Pattern): {right}"
+        self.wrong = wrong
+        self.right = right
+        self.msg = msg
+        super().__init__(f"{err} {code}: {msg}")
 
 class ArgumentCodes(Enum):
     NONE: int = 0
@@ -39,17 +46,8 @@ class ArgumentCodes(Enum):
 
 # current max: 21
 class ArgumentError(BaseError):
-    def __init__(self, code: ArgumentCodes, msg=None, wrong_argument=None, right_argument=None):
-        if msg is None:
-            msg: str = f"Argument Error!"
-        if wrong_argument is not None:
-            msg += f"\nWrong Argument: {wrong_argument}"
-        if right_argument is not None:
-            msg += f"\nRight Argument (Pattern): {right_argument}"
-        self.wrong_argument = wrong_argument
-        self.right_argument = right_argument
-        self.msg = msg
-        super().__init__(code, msg)
+    def __init__(self, code: ArgumentCodes, msg="", wrong_argument=None, right_argument=None):
+        super().__init__(code, msg, wrong_argument, right_argument, "Argument Error")
 
 class MathCodes(Enum):
     NONE: int = 0
@@ -68,19 +66,10 @@ class MathCodes(Enum):
 
 # current max: 1
 class MathError(BaseError):
-    def __init__(self, code: MathCodes, msg=None, wrong_argument=None, right_argument=None):
-        if msg is None:
-            msg: str = f"Math Error!"
-        if wrong_argument is not None:
-            msg += f"\nWrong Argument: {wrong_argument}"
-        if right_argument is not None:
-            msg += f"\nRight Argument (Pattern): {right_argument}"
-        self.wrong_argument = wrong_argument
-        self.right_argument = right_argument
-        self.msg = msg
-        super().__init__(code, msg)
+    def __init__(self, code: MathCodes, msg="", wrong_argument=None, right_argument=None):
+        super().__init__(code, msg, wrong_argument, right_argument, "Math Error")
 
 def TODO(func):
     def wrapper(*args, **kwargs):
-        raise BaseError(BaseCodes.TODO, "This function has yet to be fully or partially implemted!")
+        raise BaseError(BaseCodes.TODO, "This function has yet to be fully or partially implemented!")
     return wrapper

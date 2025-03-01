@@ -8,16 +8,22 @@ from useful_utility.algebra.matrix import Matrix
 
 
 class Vector(Matrix):
-    def __init__(self, dimension: int = 2, *coords):
+    def __init__(self, dimension: int = 2, coordinates = None):
         d: list = list()
-        for coord in coords:
+        if coordinates is None:
+            coordinates: list = list()
+        if isinstance(coordinates, tuple):
+            coordinates = list(coordinates)
+        assertion.assert_types(coordinates, Types.LISTS.value, ArgumentError,
+                               code=ArgumentCodes.NOT_LISTS)
+        for coord in coordinates:
             if isinstance(coord, Types.NUMBER.value):
                 d.append([coord])
             elif isinstance(coord, Types.LISTS.value):
                 d.append([coord[0]])
             else:
-                raise ArgumentError(ArgumentCodes.UNEXPECTED_TYPE)
-        super().__init__(dimension, 1, data=d)
+                raise ArgumentError(ArgumentCodes.UNEXPECTED_TYPE, wrong_argument=type(coord))
+        super().__init__(d, dimension, 1)
 
     @classmethod
     def from_matrix(cls, matrix: Matrix):
@@ -26,7 +32,7 @@ class Vector(Matrix):
         coordinates: list = list()
         for component in matrix.get_components():
             coordinates.append(component[0])
-        return Vector(len(coordinates), *coordinates)
+        return Vector(len(coordinates), coordinates)
 
     @override
     def get_dimension(self) -> int:
@@ -102,7 +108,7 @@ class Vector(Matrix):
                     d += n
             return d
         vector: np.ndarray = self.get_data()
-        return Vector(self.get_dimension(), *list(vector * other))
+        return Vector(self.get_dimension(), list(vector * other))
 
     @override
     def __rmul__(self, other):
