@@ -261,10 +261,10 @@ class Matrix:
                 for column_index, column in enumerate(self._data):
                     temp.append(list())
                     for component in self._data[column_index]:
-                        temp.append(component * other)
+                        temp[column_index].append(component * other)
             else:
                 for component in self._data:
-                    temp.append(component * other)
+                    temp.append([component * other])
             multiplied.set_components(temp)
         return multiplied
 
@@ -293,10 +293,10 @@ class Matrix:
                 for column_index, column in enumerate(self._data):
                     temp.append(list())
                     for component in self._data[column_index]:
-                        temp.append(component * other)
+                        temp[column_index].append(component * other)
             else:
                 for component in self._data:
-                    temp.append(component * other)
+                    temp.append([component * other])
             multiplied.set_components(temp)
         return multiplied
 
@@ -328,10 +328,10 @@ class Matrix:
 
     def __pow__(self, power, modulo=None):
         assertion.assert_false(modulo, MathCodes, code=MathCodes.NOT_FALSE, msg="Modulo not defined.")
-        assertion.assert_is_positiv(power, MathError, code=MathCodes.NOT_POSITIV)
         assertion.assert_types(power, Types.INT.value, MathError, code=MathCodes.NOT_INT)
+        assertion.assert_is_positiv(power, MathError, code=MathCodes.NOT_POSITIV)
         multiplied: Matrix = self.copy()
-        for _ in range(power):
+        for _ in range(power-1):
             multiplied *= self
         return multiplied
 
@@ -342,6 +342,9 @@ class Matrix:
 
     def __str__(self):
         return f"{self._data}"
+
+    def __repr__(self):
+        return self.__str__()
 
 class QuadraticMatrix(Matrix):
     def __init__(self, data: list = None, n: int = 2):
