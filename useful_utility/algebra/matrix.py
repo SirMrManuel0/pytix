@@ -68,6 +68,10 @@ class Matrix:
     and more. The matrix can be created from a 2D list of numbers or initialized as a zero matrix. It supports
     operations with other matrices and scalar values, and provides methods for accessing and modifying matrix
     components.
+    Une classe qui représente une matrice mathématique. Elle a différentes méthodes comme l'addition, la soustraction,
+    multiplication et plus encore. La matrice peut être créée à partir d'une liste de nombres en 2D ou initialisée en
+    tant que matrice zéro. Elle prend en charge les opérations avec d'autres matrices et valeurs scalaires, et fournit
+    des méthodes pour accéder aux composants de la matrice et les modifier.
 
     Attributes:
         _data (np.ndarray): A NumPy array holding the matrix data.
