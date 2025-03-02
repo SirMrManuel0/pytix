@@ -1,6 +1,9 @@
+import math
+
 import pytest
 import numpy as np
-from useful_utility.algebra import Matrix
+from useful_utility.algebra import Matrix, Vector, Axis
+from useful_utility.algebra.statics import rnd
 from useful_utility.errors import *
 
 
@@ -103,3 +106,87 @@ def test_pow():
         _ = m1 ** "5"
         m1 = Matrix([[3, 2], [1, 2], [5, 4]])
         _ = m1 ** 25
+
+def test_create_rotation_matrix_2D():
+    m1 = Matrix.create_rotation_matrix_2D(90)
+    v1 = Vector(coordinates=[1, 0])
+
+    expected = Vector([0, 1])
+
+    result = m1 * v1
+    assert result == expected
+
+    m1 = Matrix.create_rotation_matrix_2D(180)
+    v1 = Vector(coordinates=[1, 0])
+
+    expected = Vector([-1, 0])
+
+    result = m1 * v1
+    assert result == expected
+
+    m1 = Matrix.create_rotation_matrix_2D(270)
+    v1 = Vector(coordinates=[1, 0])
+
+    expected = Vector([0, -1])
+
+    result = m1 * v1
+    assert result == expected
+
+    m1 = Matrix.create_rotation_matrix_2D(360)
+    v1 = Vector(coordinates=[1, 0])
+
+    expected = Vector([1, 0])
+
+    result = m1 * v1
+    assert result == expected
+
+    m1 = Matrix.create_rotation_matrix_2D(45)
+    v1 = Vector(coordinates=[1, 0])
+
+    expected = Vector([rnd(math.sqrt(2) / 2), rnd(math.sqrt(2) / 2)])
+
+    result = m1 * v1
+    assert result == expected
+
+    with pytest.raises(ArgumentError):
+        Matrix.create_rotation_matrix_2D(-10)
+        Matrix.create_rotation_matrix_2D(400)
+        Matrix.create_rotation_matrix_2D("90")
+
+def test_create_rotation_matrix_3D():
+    m = Matrix.create_rotation_matrix_3D(90, Axis.X)
+    v = Vector([0, 1, 0])
+
+    expected = Vector([0, 0, 1])
+
+    result = m * v
+    assert result == expected
+
+    m = Matrix.create_rotation_matrix_3D(90, Axis.Y)
+    v = Vector([1, 0, 0])
+
+    expected = Vector([0, 0, -1])
+
+    result = m * v
+    assert result == expected
+
+    m = Matrix.create_rotation_matrix_3D(90, Axis.Z)
+    v = Vector([1, 0, 0])
+
+    expected = Vector([0, 1, 0])
+
+    result = m * v
+    assert result == expected
+
+    m = Matrix.create_rotation_matrix_3D(360, Axis.Y)
+    v = Vector([1, 0, 0])
+
+    expected = Vector([1, 0, 0])
+
+    result = m * v
+    assert result == expected
+
+    with pytest.raises(ArgumentError):
+        Matrix.create_rotation_matrix_3D(-10, Axis.X)
+        Matrix.create_rotation_matrix_3D(400, Axis.Y)
+        Matrix.create_rotation_matrix_3D(90, "invalid_axis")

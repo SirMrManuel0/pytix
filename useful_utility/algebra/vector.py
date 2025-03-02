@@ -8,7 +8,7 @@ from useful_utility.algebra.matrix import Matrix
 
 
 class Vector(Matrix):
-    def __init__(self, dimension: int = 2, coordinates = None):
+    def __init__(self, coordinates=None, dimension: int = 2):
         d: list = list()
         if coordinates is None:
             coordinates: list = list()
@@ -32,7 +32,7 @@ class Vector(Matrix):
         coordinates: list = list()
         for component in matrix.get_components():
             coordinates.append(component[0])
-        return Vector(len(coordinates), coordinates)
+        return Vector(coordinates, len(coordinates))
 
     @override
     def get_dimension(self) -> int:
@@ -108,7 +108,7 @@ class Vector(Matrix):
                     d += n
             return d
         vector: np.ndarray = self.get_data()
-        return Vector(self.get_dimension(), list(vector * other))
+        return Vector(list(vector * other), self.get_dimension())
 
     @override
     def __rmul__(self, other):
