@@ -1,8 +1,12 @@
 from setuptools import setup, find_packages
 
 def parse_requirements(filename):
-    with open(filename, 'r') as f:
-        return [line.strip() for line in f if line.strip() and not line.startswith("#")]
+    with open(filename, 'r', encoding="utf-8") as f:
+        lines: list = f.readlines()
+        lines = [line.strip() for line in lines]
+        lines = [line for line in lines if len(line) > 0]
+        return lines
+
 
 setup(
     name="useful_utility",
