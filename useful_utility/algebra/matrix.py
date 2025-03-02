@@ -1,7 +1,9 @@
+import math
 from typing import override
-
+from enum import Enum
 import numpy as np
 
+from useful_utility.algebra.statics import rnd
 from useful_utility.errors import ArgumentError, MathError, ArgumentCodes, assertion, MathCodes, Types
 
 def add_matrix(A, B):
@@ -61,6 +63,10 @@ def matrix_multiply_opt(A, B):
 
     return C
 
+class Axis(Enum):
+    X: int = 0
+    Y: int = 1
+    Z: int = 2
 
 class Matrix:
     """
@@ -265,11 +271,13 @@ class Matrix:
         """
         Creates an identity matrix of size n x n.
 
+        Crée une matrice unité.
+
         Args:
             n (int): The size of the identity matrix. Default is 2.
 
         Returns:
-            QuadraticMatrix: A new identity matrix of the specified size.
+            Identity matrix (QuadraticMatrix): A new identity matrix of the specified size.
 
         Raises:
             ArgumentError: If n is not an integer.
@@ -282,6 +290,73 @@ class Matrix:
         for i in range(len(identity_matrix)):
             identity_matrix[i][i] = 1
         return QuadraticMatrix(data=list(identity_matrix))
+
+    @classmethod
+    def create_rotation_matrix_2D(cls, theta):
+        """
+        Creates a rotation matrix (counterclockwise) for a 2D vector.
+
+        Crée une matrice de rotation (anti-horaire) pour un 2D vecteur.
+
+        Args:
+            theta (float): the angle of rotation in degree.
+
+        Returns:
+            A rotation matrix (QuadraticMatrix): for the angle theta.
+
+        Raises:
+            ArgumentError: If theta is not a number (int, float).
+            ArgumentError: If theta is smaller 0 or bigger 360.
+        """
+        assertion.assert_types(theta, Types.NUMBER.value, ArgumentError, code=ArgumentCodes.NOT_NUMBER)
+        assertion.assert_range(theta, 0, 360, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+        return QuadraticMatrix([
+            [math.cos(math.radians(theta)), (-1) * math.sin(math.radians(theta))],
+            [math.sin(math.radians(theta)), math.cos(math.radians(theta))]
+        ])
+
+    @classmethod
+    def create_rotation_matrix_3D(cls, theta, axis: Axis):
+        """
+        Creates a rotation matrix (counterclockwise) for a 3D vector.
+
+        Crée une matrice de rotation (anti-horaire) pour un 3D vecteur.
+
+        Args:
+            theta (float): the angle of rotation in degree.
+            axis (Axis): the axis for which the rotation matrix should be.
+
+        Returns:
+            A rotation matrix (QuadraticMatrix): for the angle theta.
+
+        Raises:
+            ArgumentError: If theta is not a number (int, float).
+            ArgumentError: If theta is smaller 0 or bigger 360.
+            ArgumentError: If axis not of type Axis.
+        """
+        assertion.assert_types(theta, Types.NUMBER.value, ArgumentError, code=ArgumentCodes.NOT_NUMBER)
+        assertion.assert_range(theta, 0, 360, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+        assertion.assert_type(axis, Axis, ArgumentError, code=ArgumentCodes.NOT_AXIS)
+        matrix: list = list()
+        if axis.value == Axis.X.value:
+            matrix: list = [
+                [1, 0, 0],
+                [0, math.cos(math.radians(theta)), (-1) * math.sin(math.radians(theta))],
+                [0, math.sin(math.radians(theta)), math.cos(math.radians(theta))]
+            ]
+        elif axis.value == Axis.Y.value:
+            matrix: list = [
+                [math.cos(math.radians(theta)), 0, math.sin(math.radians(theta))],
+                [0, 1, 0],
+                [(-1) * math.sin(math.radians(theta)), 0, math.cos(math.radians(theta))]
+            ]
+        else:
+            matrix: list = [
+                [math.cos(math.radians(theta)), (-1) * math.sin(math.radians(theta)), 0],
+                [math.sin(math.radians(theta)), math.cos(math.radians(theta)), 0],
+                [0, 0, 1]
+            ]
+        return QuadraticMatrix(matrix)
 
     def __eq__(self, other):
         if isinstance(other, Matrix):
@@ -355,10 +430,20 @@ class Matrix:
             a: list = list(self.get_components())
             b: list = list(other.get_components())
             c: list = list()
-            if self._rows == self._columns:
+            if other.get_rows() == 1:
+                a: np.ndarray = np.array(a)
+                b: np.ndarray = np.array(b)
+                c: list = list(np.dot(a, b))
+            elif self._rows == self._columns:
                 c: list = strassen_multiply(a, b)
             else:
                 c: list = matrix_multiply_opt(a, b)
+            c_: list = list()
+            for ind, column in enumerate(c):
+                c_.append(list())
+                for row in column:
+                    c_[ind].append(rnd(row))
+            c = c_
             multiplied.set_components(c)
 
         if isinstance(other, Types.NUMBER.value):

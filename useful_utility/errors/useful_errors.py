@@ -43,6 +43,7 @@ class ArgumentCodes(Enum):
     NOT_TUPLE_LIST_ND_ARRAY: int = 12
     NOT_FLOAT: int = 13
     UNEXPECTED_TYPE: int = 14
+    NOT_AXIS: int = 15
 
 # current max: 21
 class ArgumentError(BaseError):
