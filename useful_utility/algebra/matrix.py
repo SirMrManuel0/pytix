@@ -63,6 +63,93 @@ def matrix_multiply_opt(A, B):
 
 
 class Matrix:
+    """
+    A class representing a mathematical matrix with various operations like addition, subtraction, multiplication,
+    and more. The matrix can be created from a 2D list of numbers or initialized as a zero matrix. It supports
+    operations with other matrices and scalar values, and provides methods for accessing and modifying matrix
+    components.
+
+    Attributes:
+        _data (np.ndarray): A NumPy array holding the matrix data.
+        _rows (int): The number of rows in the matrix.
+        _columns (int): The number of columns in the matrix.
+
+    Methods:
+        __init__(data: list, columns: int, rows: int):
+            Initializes the matrix with the given data, number of rows, and columns.
+
+        get_rows():
+            Returns the number of rows in the matrix.
+
+        get_columns():
+            Returns the number of columns in the matrix.
+
+        get_dimension():
+            Returns a tuple representing the (columns, rows) of the matrix.
+
+        get_component(column: int, row: int):
+            Returns the element at the specified column and row.
+
+        set_component(column: int, row: int, value: int | float | np.float64):
+            Sets the value of the element at the specified column and row.
+
+        get_components():
+            Returns a copy of the matrix data.
+
+        set_components(data: list | np.ndarray):
+            Sets the matrix data with the provided list or NumPy array.
+
+        copy():
+            Returns a copy of the matrix.
+
+        __eq__(other):
+            Checks if the matrix is equal to another matrix or NumPy array.
+
+        __add__(other):
+            Adds another matrix to the current matrix.
+
+        __radd__(other):
+            Right-hand addition for matrices.
+
+        __iadd__(other):
+            In-place addition for matrices.
+
+        __sub__(other):
+            Subtracts another matrix from the current matrix.
+
+        __rsub__(other):
+            Right-hand subtraction for matrices.
+
+        __isub__(other):
+            In-place subtraction for matrices.
+
+        __mul__(other):
+            Multiplies the current matrix with another matrix or scalar value.
+
+        __rmul__(other):
+            Right-hand multiplication for matrices or scalars.
+
+        __imul__(other):
+            In-place multiplication for matrices or scalars.
+
+        __truediv__(other):
+            Divides the matrix by a scalar value.
+
+        __itruediv__(other):
+            In-place division for matrices.
+
+        __pow__(power, modulo=None):
+            Raises the matrix to the power of a given integer.
+
+        __ipow__(power):
+            In-place exponentiation for matrices.
+
+        __str__():
+            Returns a string representation of the matrix.
+
+        __repr__():
+            Returns a string representation of the matrix.
+    """
     def __init__(self, data: list = None, columns: int = 2, rows: int = 2):
         default_data: bool = False
         if data is None:
@@ -170,8 +257,22 @@ class Matrix:
 
     @classmethod
     def create_identity_matrix(cls, n: int = 2):
+        """
+        Creates an identity matrix of size n x n.
+
+        Args:
+            n (int): The size of the identity matrix. Default is 2.
+
+        Returns:
+            QuadraticMatrix: A new identity matrix of the specified size.
+
+        Raises:
+            ArgumentError: If n is not an integer.
+            ArgumentError: If n is not positiv.
+        """
         assertion.assert_types(n, Types.INT.value, ArgumentError,
                                code=ArgumentCodes.NOT_INT)
+        assertion.assert_is_positiv(n, ArgumentError, code=ArgumentCodes.NOT_POSITIV)
         identity_matrix: np.ndarray = np.zeros(shape=(n, n))
         for i in range(len(identity_matrix)):
             identity_matrix[i][i] = 1
