@@ -112,7 +112,7 @@ def test_create_rotation_matrix_2D():
     v1 = Vector(coordinates=[1, 0])
 
     expected = Vector([0, 1])
-
+    assert m1 == np.array([[0, -1], [1, 0]])
     result = m1 * v1
     assert result == expected
 
