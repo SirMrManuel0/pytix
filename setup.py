@@ -1,18 +1,10 @@
 from setuptools import setup, find_packages
 
-def parse_requirements(filename):
-    with open(filename, 'r', encoding="utf-8") as f:
-        lines: list = f.readlines()
-        lines = [line.strip() for line in lines]
-        lines = [line for line in lines if len(line) > 0]
-        return lines
-
-
 setup(
     name="useful_utility",
     version="0.1.2",
     packages=find_packages(),
-    install_requires=parse_requirements("requirements.txt"),
+    install_requires=["colorama", "iniconfig", "numpy", "packaging", "pluggy", "pytest", "setuptools"],
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
     author="SirMrManuel",
