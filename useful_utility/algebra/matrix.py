@@ -311,8 +311,8 @@ class Matrix:
         assertion.assert_types(theta, Types.NUMBER.value, ArgumentError, code=ArgumentCodes.NOT_NUMBER)
         assertion.assert_range(theta, 0, 360, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
         return QuadraticMatrix([
-            [math.cos(math.radians(theta)), (-1) * math.sin(math.radians(theta))],
-            [math.sin(math.radians(theta)), math.cos(math.radians(theta))]
+            [rnd(math.cos(math.radians(theta))), rnd((-1) * math.sin(math.radians(theta)))],
+            [rnd(math.sin(math.radians(theta))), rnd(math.cos(math.radians(theta)))]
         ])
 
     @classmethod
@@ -341,19 +341,19 @@ class Matrix:
         if axis.value == Axis.X.value:
             matrix: list = [
                 [1, 0, 0],
-                [0, math.cos(math.radians(theta)), (-1) * math.sin(math.radians(theta))],
-                [0, math.sin(math.radians(theta)), math.cos(math.radians(theta))]
+                [0, rnd(math.cos(math.radians(theta))), rnd((-1) * math.sin(math.radians(theta)))],
+                [0, rnd(math.sin(math.radians(theta))), rnd(math.cos(math.radians(theta)))]
             ]
         elif axis.value == Axis.Y.value:
             matrix: list = [
-                [math.cos(math.radians(theta)), 0, math.sin(math.radians(theta))],
+                [rnd(math.cos(math.radians(theta))), 0, rnd(math.sin(math.radians(theta)))],
                 [0, 1, 0],
-                [(-1) * math.sin(math.radians(theta)), 0, math.cos(math.radians(theta))]
+                [rnd((-1) * math.sin(math.radians(theta))), 0, rnd(math.cos(math.radians(theta)))]
             ]
         else:
             matrix: list = [
-                [math.cos(math.radians(theta)), (-1) * math.sin(math.radians(theta)), 0],
-                [math.sin(math.radians(theta)), math.cos(math.radians(theta)), 0],
+                [rnd(math.cos(math.radians(theta))), rnd((-1) * math.sin(math.radians(theta))), 0],
+                [rnd(math.sin(math.radians(theta))), rnd(math.cos(math.radians(theta))), 0],
                 [0, 0, 1]
             ]
         return QuadraticMatrix(matrix)
