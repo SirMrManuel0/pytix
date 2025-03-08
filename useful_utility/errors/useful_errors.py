@@ -44,6 +44,7 @@ class ArgumentCodes(Enum):
     NOT_FLOAT: int = 13
     UNEXPECTED_TYPE: int = 14
     NOT_AXIS: int = 15
+    NOT_VECTOR3D: int = 16
 
 # current max: 21
 class ArgumentError(BaseError):

@@ -9,9 +9,12 @@ from useful_utility.algebra.matrix import Matrix
 
 class Vector(Matrix):
     def __init__(self, coordinates=None, dimension: int = 2):
+        assertion.assert_types(dimension, Types.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
+        assertion.assert_is_positiv(dimension, ArgumentError, code=ArgumentCodes.NOT_POSITIV)
+        assertion.assert_not_zero(dimension, ArgumentError, code=ArgumentCodes.ZERO)
         d: list = list()
         if coordinates is None:
-            coordinates: list = list()
+            coordinates: list = [0 for _ in range(dimension)]
         if isinstance(coordinates, tuple):
             coordinates = list(coordinates)
         assertion.assert_types(coordinates, Types.LISTS.value, ArgumentError,
@@ -135,3 +138,59 @@ class Vector(Matrix):
     @override
     def copy(self):
         return Vector.from_matrix(super().copy())
+
+class Vector2D(Vector):
+    def __init__(self, coordinates=None):
+        assertion.assert_types(coordinates, Types.LISTS.value, ArgumentError, code=ArgumentCodes.NOT_LISTS)
+        if len(coordinates) == 0:
+            coordinates = [0, 0]
+        assertion.assert_equals(len(coordinates), 2, ArgumentError, code=ArgumentCodes.NOT_EQUAL)
+        super().__init__(coordinates, 2)
+
+    @classmethod
+    def from_vector(cls, vec: Vector):
+        assertion.assert_equals(vec.get_dimension(), 2, ArgumentError, code=ArgumentCodes.MISMATCH_DIMENSION)
+        return Vector2D(vec.get_data())
+
+    @classmethod
+    def from_matrix(cls, matrix: Matrix):
+        assertion.assert_equals(matrix.get_rows(), 1, ArgumentError,
+                                code=ArgumentCodes.MISMATCH_DIMENSION)
+        assertion.assert_equals(matrix.get_columns(), 2, ArgumentError, code=ArgumentCodes.MISMATCH_DIMENSION)
+        coordinates: list = list()
+        for component in matrix.get_components():
+            coordinates.append(component[0])
+        return Vector2D(coordinates)
+
+class Vector3D(Vector):
+    def __init__(self, coordinates=None):
+        assertion.assert_types(coordinates, Types.LISTS.value, ArgumentError, code=ArgumentCodes.NOT_LISTS)
+        if len(coordinates) == 0:
+            coordinates = [0, 0, 0]
+        assertion.assert_equals(len(coordinates), 3, ArgumentError, code=ArgumentCodes.NOT_EQUAL)
+        super().__init__(coordinates, 3)
+
+    @classmethod
+    def from_vector(cls, vec: Vector):
+        assertion.assert_equals(vec.get_dimension(), 3, ArgumentError, code=ArgumentCodes.MISMATCH_DIMENSION)
+        return Vector3D(vec.get_data())
+
+    @classmethod
+    def from_matrix(cls, matrix: Matrix):
+        assertion.assert_equals(matrix.get_rows(), 1, ArgumentError,
+                                code=ArgumentCodes.MISMATCH_DIMENSION)
+        assertion.assert_equals(matrix.get_columns(), 3, ArgumentError, code=ArgumentCodes.MISMATCH_DIMENSION)
+        coordinates: list = list()
+        for component in matrix.get_components():
+            coordinates.append(component[0])
+        return Vector3D(coordinates)
+
+    def cross(self, vec):
+        assertion.assert_type(vec, Vector3D, ArgumentError, code=ArgumentCodes.NOT_VECTOR3D)
+        a, b, c = vec.get_data()
+        d, e, f = self.get_data()
+        return Vector3D([
+            e * c - f * b,
+            f * a - d * c,
+            d * b - e * a
+        ])
