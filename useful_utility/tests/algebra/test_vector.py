@@ -68,3 +68,19 @@ def test_idiv():
     with pytest.raises(MathError):
         v1 /= 0
         v1 /= "5"
+
+def test_cross():
+    v1: Vector = Vector([1, 0, 0])
+    v2: Vector = Vector([0, 1, 0])
+    v3: Vector = Vector([0, 0, 1])
+    v_cross = v1.cross(v2)
+    assert v_cross == v3
+
+    with pytest.raises(ArgumentError):
+        v1.cross("a")
+        v1.cross(0)
+        v1.cross([0])
+        v1.cross(Vector([1, 1, 1, 1]))
+        v1: Vector = Vector([1, 1, 1, 1])
+        v1.cross(Vector([1, 1, 1, 1]))
+        v1.cross(Vector([1, 1, 1]))
