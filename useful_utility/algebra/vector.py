@@ -150,5 +150,13 @@ class Vector(Matrix):
         raise MathError(MathCodes.NOT_DEFINED, msg="This Action is not defined.")
 
     @override
+    def __str__(self) -> str:
+        return f"{self.get_data()}"
+
+    @override
+    def __repr__(self) -> str:
+        return f"Vector at {hex(id(self))} with:\n {self.get_data()}"
+
+    @override
     def copy(self) -> Self:
         return Vector.from_matrix(super().copy())
