@@ -29,6 +29,18 @@ class Vector(Matrix):
                 raise ArgumentError(ArgumentCodes.UNEXPECTED_TYPE, wrong_argument=type(coord))
         super().__init__(d, dimension, 1)
 
+    def cross(self, vec: Self) -> Self:
+        assertion.assert_type(vec, Vector, ArgumentError, code=ArgumentCodes.NOT_VECTOR)
+        assertion.assert_equals(vec.get_dimension(), 3, MathError, code=MathCodes.UNFIT_DIMENSIONS)
+        assertion.assert_equals(self.get_dimension(), 3, MathError, code=MathCodes.UNFIT_DIMENSIONS)
+        a, b, c = vec.get_data()
+        d, e, f = self.get_data()
+        return Vector([
+            e * c - f * b,
+            f * a - d * c,
+            d * b - e * a
+        ])
+
     @classmethod
     def from_matrix(cls, matrix: Matrix) -> Self:
         assertion.assert_equals(matrix.get_rows(), 1, ArgumentError,
