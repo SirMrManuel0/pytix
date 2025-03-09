@@ -77,7 +77,7 @@ class Vector(Matrix):
 
     def get_data(self) -> np.ndarray:
         n: np.ndarray = self.get_components()
-        n.reshape(self.get_dimension())
+        n = n.reshape(self.get_dimension())
         return n
 
     def length(self) -> float:
