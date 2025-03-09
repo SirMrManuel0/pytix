@@ -9,6 +9,7 @@ __all__ = [
     "MathCodes",
     "ArgumentCodes",
     "TODO",
+    "TypesTuple",
     "Types",
     "assertion"
 ]

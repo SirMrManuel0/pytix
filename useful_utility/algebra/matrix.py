@@ -1,10 +1,10 @@
 import math
-from typing import override
+from typing import override, Optional, Self, Union
 from enum import Enum
 import numpy as np
 
 from useful_utility.algebra.statics import rnd
-from useful_utility.errors import ArgumentError, MathError, ArgumentCodes, assertion, MathCodes, Types
+from useful_utility.errors import ArgumentError, MathError, ArgumentCodes, assertion, MathCodes, TypesTuple, Types
 
 def add_matrix(A, B):
     return [[A[i][j] + B[i][j] for j in range(len(A))] for i in range(len(A))]
@@ -161,40 +161,40 @@ class Matrix:
         __repr__():
             Returns a string representation of the matrix.
     """
-    def __init__(self, data: list = None, columns: int = 2, rows: int = 2):
+    def __init__(self, data: list = None, columns: Types.INT.value = 2, rows: Types.INT.value = 2):
         default_data: bool = False
         if data is None:
             data = np.zeros(shape=(2, 2))
             default_data = True
-        assertion.assert_types(rows, (int,), ArgumentError, code=ArgumentCodes.NOT_INT)
-        assertion.assert_types(columns, (int,), ArgumentError, code=ArgumentCodes.NOT_INT)
-        assertion.assert_types(data, Types.LISTS.value, ArgumentError, code=ArgumentCodes.NOT_LISTS)
+        assertion.assert_types(rows, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
+        assertion.assert_types(columns, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
+        assertion.assert_types(data, TypesTuple.LISTS.value, ArgumentError, code=ArgumentCodes.NOT_LISTS)
         assertion.assert_is_positiv(rows, ArgumentError, code=ArgumentCodes.NOT_POSITIV)
         assertion.assert_is_positiv(columns, ArgumentError, code=ArgumentCodes.NOT_POSITIV)
         assertion.assert_not_zero(columns, ArgumentError, code=ArgumentCodes.ZERO)
         assertion.assert_not_zero(rows, ArgumentError, code=ArgumentCodes.ZERO)
         if len(data) > 0:
             assertion.assert_layer_list(data, assertion.assert_types,
-                                        {"types": (*Types.NUMBER.value, *Types.LISTS.value)}, ArgumentError,
+                                        {"types": (*TypesTuple.NUMBER.value, *TypesTuple.LISTS.value)}, ArgumentError,
                                         code=ArgumentCodes.LIST_LAYER_NOT_NUMBER_LISTS)
-        if len(data) > 0 and isinstance(data[0], Types.LISTS.value):
+        if len(data) > 0 and isinstance(data[0], TypesTuple.LISTS.value):
             for d in data:
-                assertion.assert_types(d, Types.LISTS.value, ArgumentError,
+                assertion.assert_types(d, TypesTuple.LISTS.value, ArgumentError,
                                        code=ArgumentCodes.NOT_LISTS)
                 assertion.assert_layer_list(d, assertion.assert_types,
-                                            {"types": Types.NUMBER.value}, ArgumentError,
+                                            {"types": TypesTuple.NUMBER.value}, ArgumentError,
                                             code=ArgumentCodes.LIST_LAYER_NOT_NUMBER)
-        if len(data) > 0 and isinstance(data[0], Types.NUMBER.value):
+        if len(data) > 0 and isinstance(data[0], TypesTuple.NUMBER.value):
             for d in data:
-                assertion.assert_types(d, Types.NUMBER.value, ArgumentError,
+                assertion.assert_types(d, TypesTuple.NUMBER.value, ArgumentError,
                                        code=ArgumentCodes.NOT_NUMBER)
             copy_ = list()
             for d in data:
                 copy_.append([d])
             data = copy_
 
-        self._rows: int = rows
-        self._columns: int = columns
+        self._rows: int = int(rows)
+        self._columns: int = int(columns)
 
         if not default_data and rows == 2:
             self._rows: int = len(data[0])
@@ -220,12 +220,21 @@ class Matrix:
     def get_dimension(self) -> tuple:
         return self._columns, self._rows
 
-    def get_component(self, column: int, row: int):
+    def get_component(self, column: Types.INT.value, row: Types.INT.value) -> float:
+        assertion.assert_types(column, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
+        assertion.assert_types(row, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
+
         assertion.assert_range(column, 0, len(self._data) - 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
         assertion.assert_range(row, 0, len(self._data[column]) - 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+        column = int(column)
+        row = int(row)
         return float(self._data[column][row])
 
-    def set_component(self, column: int, row: int, value: int | float | np.float64) -> None:
+    def set_component(self, column: Types.INT.value, row: Types.INT.value, value: Types.NUMBER.value) -> None:
+        assertion.assert_types(column, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
+        assertion.assert_types(row, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
+        assertion.assert_types(value, TypesTuple.NUMBER.value, ArgumentError, code=ArgumentCodes.NOT_NUMBER)
+
         assertion.assert_range(column, 0, len(self._data) - 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
         assertion.assert_range(row, 0, len(self._data[column]) - 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
         self._data[column][row] = value
@@ -233,23 +242,23 @@ class Matrix:
     def get_components(self) -> np.ndarray:
         return self._data.copy()
 
-    def set_components(self, data: list | np.ndarray) -> None:
-        assertion.assert_types(data, Types.LISTS.value, ArgumentError,
+    def set_components(self, data: Types.LISTS.value) -> None:
+        assertion.assert_types(data, TypesTuple.LISTS.value, ArgumentError,
                                code=ArgumentCodes.NOT_LISTS)
         if len(data) > 0:
             assertion.assert_layer_list(data, assertion.assert_types,
-                                        {"types": (*Types.NUMBER.value, *Types.LISTS.value)}, ArgumentError,
+                                        {"types": (*TypesTuple.NUMBER.value, *TypesTuple.LISTS.value)}, ArgumentError,
                                         code=ArgumentCodes.LIST_LAYER_NOT_NUMBER_LISTS)
-        if len(data) > 0 and isinstance(data[0], Types.LISTS.value):
+        if len(data) > 0 and isinstance(data[0], TypesTuple.LISTS.value):
             for d in data:
-                assertion.assert_types(d, Types.LISTS.value, ArgumentError,
+                assertion.assert_types(d, TypesTuple.LISTS.value, ArgumentError,
                                        code=ArgumentCodes.NOT_LISTS)
                 assertion.assert_layer_list(d, assertion.assert_types,
-                                            {"types": Types.NUMBER.value}, ArgumentError,
+                                            {"types": TypesTuple.NUMBER.value}, ArgumentError,
                                             code=ArgumentCodes.LIST_LAYER_NOT_NUMBER)
-        if len(data) > 0 and isinstance(data[0], Types.NUMBER.value):
+        if len(data) > 0 and isinstance(data[0], TypesTuple.NUMBER.value):
             for d in data:
-                assertion.assert_types(d, Types.NUMBER.value, ArgumentError,
+                assertion.assert_types(d, TypesTuple.NUMBER.value, ArgumentError,
                                        code=ArgumentCodes.NOT_NUMBER)
             copy_ = list()
             for d in data:
@@ -263,11 +272,11 @@ class Matrix:
             self._rows = 0
         self._data = np.array(data)
 
-    def copy(self):
+    def copy(self) -> Self:
         return Matrix(data=list(self.get_components()))
 
     @classmethod
-    def create_identity_matrix(cls, n: int = 2):
+    def create_identity_matrix(cls, n: int = 2) -> Self:
         """
         Creates an identity matrix of size n x n.
 
@@ -277,22 +286,22 @@ class Matrix:
             n (int): The size of the identity matrix. Default is 2.
 
         Returns:
-            Identity matrix (QuadraticMatrix): A new identity matrix of the specified size.
+            Identity matrix (Matrix): A new identity matrix of the specified size.
 
         Raises:
             ArgumentError: If n is not an integer.
             ArgumentError: If n is not positiv.
         """
-        assertion.assert_types(n, Types.INT.value, ArgumentError,
+        assertion.assert_types(n, TypesTuple.INT.value, ArgumentError,
                                code=ArgumentCodes.NOT_INT)
         assertion.assert_is_positiv(n, ArgumentError, code=ArgumentCodes.NOT_POSITIV)
         identity_matrix: np.ndarray = np.zeros(shape=(n, n))
         for i in range(len(identity_matrix)):
             identity_matrix[i][i] = 1
-        return QuadraticMatrix(data=list(identity_matrix))
+        return Matrix(data=list(identity_matrix))
 
     @classmethod
-    def create_rotation_matrix_2D(cls, theta):
+    def create_rotation_matrix_2D(cls, theta: Types.NUMBER.value) -> Self:
         """
         Creates a rotation matrix (counterclockwise) for a 2D vector.
 
@@ -302,21 +311,21 @@ class Matrix:
             theta (float): the angle of rotation in degree.
 
         Returns:
-            A rotation matrix (QuadraticMatrix): for the angle theta.
+            A rotation matrix (Matrix): for the angle theta.
 
         Raises:
             ArgumentError: If theta is not a number (int, float).
             ArgumentError: If theta is smaller 0 or bigger 360.
         """
-        assertion.assert_types(theta, Types.NUMBER.value, ArgumentError, code=ArgumentCodes.NOT_NUMBER)
+        assertion.assert_types(theta, TypesTuple.NUMBER.value, ArgumentError, code=ArgumentCodes.NOT_NUMBER)
         assertion.assert_range(theta, 0, 360, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
-        return QuadraticMatrix([
+        return Matrix([
             [rnd(math.cos(math.radians(theta))), rnd((-1) * math.sin(math.radians(theta)))],
             [rnd(math.sin(math.radians(theta))), rnd(math.cos(math.radians(theta)))]
         ])
 
     @classmethod
-    def create_rotation_matrix_3D(cls, theta, axis: Axis):
+    def create_rotation_matrix_3D(cls, theta: Types.NUMBER.value, axis: Axis) -> Self:
         """
         Creates a rotation matrix (counterclockwise) for a 3D vector.
 
@@ -327,14 +336,14 @@ class Matrix:
             axis (Axis): the axis for which the rotation matrix should be.
 
         Returns:
-            A rotation matrix (QuadraticMatrix): for the angle theta.
+            A rotation matrix (Matrix): for the angle theta.
 
         Raises:
             ArgumentError: If theta is not a number (int, float).
             ArgumentError: If theta is smaller 0 or bigger 360.
             ArgumentError: If axis not of type Axis.
         """
-        assertion.assert_types(theta, Types.NUMBER.value, ArgumentError, code=ArgumentCodes.NOT_NUMBER)
+        assertion.assert_types(theta, TypesTuple.NUMBER.value, ArgumentError, code=ArgumentCodes.NOT_NUMBER)
         assertion.assert_range(theta, 0, 360, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
         assertion.assert_type(axis, Axis, ArgumentError, code=ArgumentCodes.NOT_AXIS)
         matrix: list = list()
@@ -356,9 +365,16 @@ class Matrix:
                 [rnd(math.sin(math.radians(theta))), rnd(math.cos(math.radians(theta))), 0],
                 [0, 0, 1]
             ]
-        return QuadraticMatrix(matrix)
+        return Matrix(matrix)
 
-    def __eq__(self, other):
+    def get_invers(self) -> Optional[Self]:
+        assertion.assert_equals(self._columns, self._rows, MathError, code=MathCodes.UNFIT_DIMENSIONS)
+        if np.linalg.det(self.get_components()) != 0:
+            invers: np.ndarray = np.linalg.inv(self.get_components())
+            return Matrix(data=list(invers))
+        return None
+
+    def __eq__(self, other: Union[np.ndarray, Self]) -> bool:
         if isinstance(other, Matrix):
             if self.get_rows() != other.get_rows() and self.get_columns() != other.get_columns():
                 return False
@@ -378,7 +394,7 @@ class Matrix:
         raise ArgumentError(ArgumentCodes.NOT_MATRIX_NP_ARRAY,
                             msg="Only matrices or np.ndarray can be compared.", wrong_argument=type(other))
 
-    def __add__(self, other) -> "Matrix":
+    def __add__(self, other: Self) -> Self:
         assertion.assert_type(other, Matrix, MathError, code=MathCodes.NOT_MATRIX,
                               msg="Only a matrix can be added to a matrix.")
         if self.get_dimension() != other.get_dimension():
@@ -387,10 +403,10 @@ class Matrix:
         matrixB = other.get_components()
         return Matrix(list(matrixA + matrixB), self._columns, self._rows)
 
-    def __radd__(self, other):
+    def __radd__(self, other: Self) -> Self:
         return self.__add__(other)
 
-    def __iadd__(self, other):
+    def __iadd__(self, other: Self) -> Self:
         assertion.assert_type(other, Matrix, MathError, code=MathCodes.NOT_MATRIX,
                               msg="Only a matrix can be added to a matrix.")
         if self.get_dimension() != other.get_dimension():
@@ -399,7 +415,7 @@ class Matrix:
         self.set_components(temp.get_components())
         return self
 
-    def __sub__(self, other):
+    def __sub__(self, other: Self) -> Self:
         assertion.assert_type(other, Matrix, MathError, code=MathCodes.NOT_MATRIX,
                               msg="Only a matrix can be subtracted to a matrix.")
         if self.get_dimension() != other.get_dimension():
@@ -408,17 +424,17 @@ class Matrix:
         matrixB = other.get_components()
         return Matrix(list(matrixA - matrixB), self._columns, self._rows)
 
-    def __rsub__(self, other):
+    def __rsub__(self, other: Self) -> Self:
         assertion.assert_type(other, Matrix, MathError, code=MathCodes.NOT_MATRIX)
         return other - self
 
-    def __isub__(self, other):
+    def __isub__(self, other: Self) -> Self:
         temp: Matrix = self - other
         self.set_components(temp.get_components())
         return self
 
-    def __mul__(self, other):
-        assertion.assert_types(other, (Matrix, *Types.NUMBER.value), MathError, code=MathCodes.NOT_MATRIX_NUMBER,
+    def __mul__(self, other: Union[Self, *TypesTuple.NUMBER.value]) -> Self:
+        assertion.assert_types(other, (Matrix, *TypesTuple.NUMBER.value), MathError, code=MathCodes.NOT_MATRIX_NUMBER,
                                msg="Only matrices, int, float can be multiplied to a matrix.")
         multiplied: Matrix = Matrix()
 
@@ -446,7 +462,7 @@ class Matrix:
             c = c_
             multiplied.set_components(c)
 
-        if isinstance(other, Types.NUMBER.value):
+        if isinstance(other, TypesTuple.NUMBER.value):
             temp: list = list()
             if self._rows > 1:
                 for column_index, column in enumerate(self._data):
@@ -459,8 +475,8 @@ class Matrix:
             multiplied.set_components(temp)
         return multiplied
 
-    def __rmul__(self, other):
-        assertion.assert_types(other, (Matrix, *Types.NUMBER.value), MathError, code=MathCodes.NOT_MATRIX_NUMBER,
+    def __rmul__(self, other: Union[Self, *TypesTuple.NUMBER.value]) -> Self:
+        assertion.assert_types(other, (Matrix, *TypesTuple.NUMBER.value), MathError, code=MathCodes.NOT_MATRIX_NUMBER,
                                msg="Only matrices, int, float can be multiplied to a matrix.")
         multiplied: Matrix = Matrix()
 
@@ -478,7 +494,7 @@ class Matrix:
                 c: list = matrix_multiply_opt(a, b)
             multiplied.set_components(c)
 
-        if isinstance(other, Types.NUMBER.value):
+        if isinstance(other, TypesTuple.NUMBER.value):
             temp: list = list()
             if self._rows > 1:
                 for column_index, column in enumerate(self._data):
@@ -491,128 +507,48 @@ class Matrix:
             multiplied.set_components(temp)
         return multiplied
 
-    def __imul__(self, other):
-        assertion.assert_types(other, (Matrix, *Types.NUMBER.value), MathError, code=MathCodes.NOT_MATRIX_NUMBER,
+    def __imul__(self, other: Union[Self, *TypesTuple.NUMBER.value]) -> Self:
+        assertion.assert_types(other, (Matrix, *TypesTuple.NUMBER.value), MathError, code=MathCodes.NOT_MATRIX_NUMBER,
                                msg="Only matrices, int, float can be multiplied to a matrix.")
 
         if isinstance(other, Matrix):
             multiplied: Matrix = self * other
             self.set_components(multiplied.get_components())
 
-        if isinstance(other, Types.NUMBER.value):
+        if isinstance(other, TypesTuple.NUMBER.value):
             multiplied: Matrix = self * other
             self.set_components(multiplied.get_components())
         return self
 
-    def __truediv__(self, other):
-        assertion.assert_types(other, Types.NUMBER.value, MathError,
+    def __truediv__(self, other: Types.NUMBER.value) -> Self:
+        assertion.assert_types(other, TypesTuple.NUMBER.value, MathError,
                                code=MathCodes.NOT_NUMBER)
         assertion.assert_not_zero(other, MathError, code=MathCodes.ZERO, msg="Division by Zero is not defined.")
         return self * (1/other)
 
-    def __itruediv__(self, other):
-        assertion.assert_types(other, Types.NUMBER.value, MathError,
+    def __itruediv__(self, other: Types.NUMBER.value) -> Self:
+        assertion.assert_types(other, TypesTuple.NUMBER.value, MathError,
                                code=MathCodes.NOT_NUMBER)
         dived: Matrix = self / other
         self.set_components(dived.get_components())
         return self
 
-    def __pow__(self, power, modulo=None):
+    def __pow__(self, power: Types.INT.value, modulo=None) -> Self:
         assertion.assert_false(modulo, MathCodes, code=MathCodes.NOT_FALSE, msg="Modulo not defined.")
-        assertion.assert_types(power, Types.INT.value, MathError, code=MathCodes.NOT_INT)
+        assertion.assert_types(power, TypesTuple.INT.value, MathError, code=MathCodes.NOT_INT)
         assertion.assert_is_positiv(power, MathError, code=MathCodes.NOT_POSITIV)
         multiplied: Matrix = self.copy()
         for _ in range(power-1):
             multiplied *= self
         return multiplied
 
-    def __ipow__(self, other):
+    def __ipow__(self, other: Types.INT.value) -> Self:
         multiplied: Matrix = self ** other
         self.set_components(multiplied.get_components())
         return self
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self._data}"
 
     def __repr__(self):
-        return self.__str__()
-
-class QuadraticMatrix(Matrix):
-    def __init__(self, data: list = None, n: int = 2):
-        if data is not None and len(data) > 0:
-            for i in range(len(data)):
-                assertion.assert_equals(len(data), len(data[i]), ArgumentError,
-                                        code=ArgumentCodes.NOT_EQUAL)
-        super().__init__(data, n, n)
-
-    @classmethod
-    def from_matrix(cls, matrix: Matrix):
-        assertion.assert_equals(matrix.get_rows(), matrix.get_columns(), ArgumentError,
-                                code=ArgumentCodes.NOT_EQUAL)
-        return QuadraticMatrix(data=list(matrix.get_components()))
-
-    def get_invers(self):
-        if np.linalg.det(self.get_components()) != 0:
-            invers: np.ndarray = np.linalg.inv(self.get_components())
-            return QuadraticMatrix(data=list(invers))
-        return
-
-    @override
-    def set_components(self, data: list | np.ndarray) -> None:
-        if data is not None and len(data) > 0:
-            for i in range(len(data)):
-                assertion.assert_equals(len(data), len(data[i]), ArgumentError,
-                                        code=ArgumentCodes.NOT_EQUAL)
-        super().set_components(data)
-
-    @override
-    def __add__(self, other):
-        added: Matrix = super().__add__(other)
-        return QuadraticMatrix.from_matrix(added)
-
-    @override
-    def __radd__(self, other):
-        added: Matrix = super().__radd__(other)
-        return QuadraticMatrix.from_matrix(added)
-
-    @override
-    def __sub__(self, other):
-        sub: Matrix = super().__sub__(other)
-        return QuadraticMatrix.from_matrix(sub)
-
-    @override
-    def __rsub__(self, other):
-        sub: Matrix = super().__rsub__(other)
-        return QuadraticMatrix.from_matrix(sub)
-
-    @override
-    def __mul__(self, other):
-        multi: Matrix = super().__mul__(other)
-        if multi.get_rows() == multi.get_columns():
-            return QuadraticMatrix.from_matrix(multi)
-        else:
-            return multi
-
-    @override
-    def __rmul__(self, other):
-        multi: Matrix = super().__rmul__(other)
-        if multi.get_rows() == multi.get_columns():
-            return QuadraticMatrix.from_matrix(multi)
-        else:
-            return multi
-
-    @override
-    def __truediv__(self, other):
-        div: Matrix = super().__truediv__(other)
-        return QuadraticMatrix.from_matrix(div)
-
-    @override
-    def __pow__(self, power, modulo=None):
-        if power == -1:
-            return self.get_invers()
-        powered: Matrix = super().__pow__(power, modulo)
-        return QuadraticMatrix.from_matrix(powered)
-
-    @override
-    def copy(self):
-        return QuadraticMatrix.from_matrix(super().copy())
+        return f"Matrix at {hex(id(self))} with:\n {self._data}"

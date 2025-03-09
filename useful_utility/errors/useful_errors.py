@@ -1,9 +1,10 @@
 from enum import Enum
+from typing import Union
 
 import numpy as np
 
 
-class Types(Enum):
+class TypesTuple(Enum):
     INT: tuple = (int, np.integer)
     FLOAT: tuple = (float, np.floating)
     NUMBER: tuple = (*INT, *FLOAT)
@@ -11,6 +12,15 @@ class Types(Enum):
     TUPLE: tuple = (tuple,)
     ND_ARRAY: tuple = (np.ndarray,)
     LISTS: tuple = (*LIST, *ND_ARRAY)
+
+class Types(Enum):
+    INT: type = Union[*TypesTuple.INT.value]
+    FLOAT: type = Union[*TypesTuple.FLOAT.value]
+    NUMBER: type = Union[*TypesTuple.NUMBER.value]
+    LIST: type = Union[*TypesTuple.LIST.value]
+    TUPLE: type = Union[*TypesTuple.TUPLE.value]
+    ND_ARRAY: type = Union[*TypesTuple.ND_ARRAY.value]
+    LISTS: type = Union[*TypesTuple.LISTS.value]
 
 class BaseCodes(Enum):
     NONE: int = 0
