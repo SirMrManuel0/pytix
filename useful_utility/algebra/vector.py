@@ -38,18 +38,6 @@ class Vector(Matrix):
             coordinates.append(component[0])
         return Vector(coordinates, len(coordinates))
 
-    def cross(self, vec: Self) -> Self:
-        assertion.assert_type(vec, Vector, ArgumentError, code=ArgumentCodes.NOT_VECTOR)
-        assertion.assert_equals(vec.get_dimension(), 3, MathError, code=MathCodes.UNFIT_DIMENSIONS)
-        assertion.assert_equals(self.get_dimension(), 3, MathError, code=MathCodes.UNFIT_DIMENSIONS)
-        a, b, c = vec.get_data()
-        d, e, f = self.get_data()
-        return Vector([
-            e * c - f * b,
-            f * a - d * c,
-            d * b - e * a
-        ])
-
     @override
     def get_dimension(self) -> int:
         return len(self._data)
