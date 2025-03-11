@@ -6,6 +6,9 @@ A class representing a mathematical matrix with various operations like addition
 Une classe qui représente une matrice mathématique. Elle a différentes méthodes comme l'addition, la soustraction, multiplication et plus encore. La matrice peut être créée à partir d'une liste de nombres en 2D ou initialisée en tant que matrice zéro. Elle prend en charge les opérations avec d'autres matrices et valeurs scalaires, et fournit des méthodes pour accéder aux composants de la matrice et les modifier. Cette matrice est itérable.
 
 Examples:
+
+
+Equal:
 ```python
 from useful_utility.algebra import Matrix
 
@@ -17,7 +20,9 @@ print(n == m)
 ```title="output"
 True
 ```
-#
+
+
+Addition:
 
 ```python
 from useful_utility.algebra import Matrix

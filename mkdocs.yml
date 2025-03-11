@@ -53,13 +53,3 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
-
-docs:
-  navigation:
-    - home
-    - Matrix:
-        - create_identity_matrix
-        - create_rotation_matrix_2D
-        - create_rotation_matrix_3D
-        - get_invers
-    - Vector
