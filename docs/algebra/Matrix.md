@@ -1,5 +1,5 @@
 
-# `Matrix`
+# Matrix
 
 A class representing a mathematical matrix with various operations like addition, subtraction, multiplication, and more. The matrix can be created from a 2D list of numbers or initialized as a zero matrix. It supports operations with other matrices and scalar values, and provides methods for accessing and modifying matrix components. This matrix is iterable.
 
@@ -35,8 +35,8 @@ print(m + m)
 
 
 
-## `create_identity_matrix(n=2)` 
-### `classmethod`
+## create_identity_matrix(n=2)`
+`classmethod`
 
 Creates an identity matrix of size n x n.
 
@@ -57,8 +57,9 @@ print(Matrix.create_identity_matrix(2))
 ]
 ```
 
-# rotation matrix 2D
-### `classmethod`
+## rotation matrix 2D
+`classmethod`
+
 Creates a rotation matrix (counterclockwise) for a 2D vector.
 
 Crée une matrice de rotation (anti-horaire) pour un 2D vecteur.
@@ -76,8 +77,9 @@ print(Matrix.create_rotation_matrix_2D(90))
 ]
 ```
 
-# rotation matrix 3D
-### `classmethod`
+## rotation matrix 3D
+`classmethod`
+
 Creates a rotation matrix (counterclockwise) for a 3D vector.
 
 Crée une matrice de rotation (anti-horaire) pour un 3D vecteur.
@@ -106,8 +108,9 @@ print(Matrix.create_rotation_matrix_3D(90, Axis.X))
 ```
 
 
-# invers
-### `classmethod`
+## invers
+`classmethod`
+
 Creates the inverse matrix for the matrix.
 
 Crée une matrice inverse pour la matrice.
