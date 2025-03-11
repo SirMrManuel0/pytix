@@ -166,9 +166,6 @@ class Matrix:
 
         __iter__():
             The class is iterable.
-    Example:
-        ..code-block:: python
-        m: Matrix = Matrix([[1, 2], [3, 4]])
     """
     def __init__(self, data: list = None, columns: Types.INT.value = 2, rows: Types.INT.value = 2):
         """
