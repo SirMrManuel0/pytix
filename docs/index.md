@@ -2,8 +2,8 @@
 
 ## Get Started 
 
-```commandline
-
+```shell
+pip install git+https://github.com/SirMrManuel0/usefull_utility_py.git
 ```
 
 ## Project layout
