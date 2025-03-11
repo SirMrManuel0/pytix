@@ -20,7 +20,7 @@ theme:
         icon: material/brightness-4
         name: Switch to light mode
       primary: black
-      accent: light blue
+      accent: deep purple
 
     # Palette toggle for light mode
     - scheme: default
@@ -28,7 +28,7 @@ theme:
         icon: material/brightness-7
         name: Switch to dark mode
       primary: black
-      accent: deep purple
+      accent: light blue
 
 plugins:
   - mkdocstrings
