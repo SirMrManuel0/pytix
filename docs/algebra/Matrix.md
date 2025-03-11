@@ -40,7 +40,7 @@ print(m + m)
 
 
 
-## create_identity_matrix(n=2)`
+## create_identity_matrix(n=2)
 `classmethod`
 
 Creates an identity matrix of size n x n.
