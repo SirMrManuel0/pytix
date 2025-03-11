@@ -190,3 +190,11 @@ def test_create_rotation_matrix_3D():
         Matrix.create_rotation_matrix_3D(-10, Axis.X)
         Matrix.create_rotation_matrix_3D(400, Axis.Y)
         Matrix.create_rotation_matrix_3D(90, "invalid_axis")
+
+def test___iter__():
+    m: Matrix = Matrix([[1, 2], [3, 4]])
+    for l in m:
+        assert all(l == [1, 2]) or all(l == [3, 4])
+        for n in l:
+            assert n in [1, 2, 3, 4]
+

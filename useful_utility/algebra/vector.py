@@ -160,3 +160,7 @@ class Vector(Matrix):
     @override
     def copy(self) -> Self:
         return Vector.from_matrix(super().copy())
+
+    @override
+    def __iter__(self) -> iter:
+        return iter(list(self.get_data()))

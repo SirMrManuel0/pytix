@@ -84,3 +84,8 @@ def test_cross():
         v1: Vector = Vector([1, 1, 1, 1])
         v1.cross(Vector([1, 1, 1, 1]))
         v1.cross(Vector([1, 1, 1]))
+
+def test___iter__():
+    m: Vector = Vector([1, 2, 3, 4])
+    for n in m:
+        assert n in [1, 2, 3, 4]

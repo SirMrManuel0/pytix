@@ -552,3 +552,6 @@ class Matrix:
 
     def __repr__(self):
         return f"Matrix at {hex(id(self))} with:\n {self._data}"
+
+    def __iter__(self) -> iter:
+        return iter(list(self.get_components()))
