@@ -168,6 +168,17 @@ class Matrix:
             The class is iterable.
     """
     def __init__(self, data: list = None, columns: Types.INT.value = 2, rows: Types.INT.value = 2):
+        """
+        Creates a 2D Matrix.
+
+        Crée une matrice 2D.
+
+        Args:
+            data (list): A 2D array which holds the components
+            columns (int): the number of columns (default 2; If none are given, columns = len(data))
+            rows (int): the number of rows (default 2; If none are given, rows = len(data[0]))
+
+        """
         default_data: bool = False
         if data is None:
             data = np.zeros(shape=(2, 2))
