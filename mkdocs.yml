@@ -18,7 +18,11 @@ theme:
         name: Switch to dark mode
 
 plugins:
-- mkdocstrings
+  - mkdocstrings
+  - search:
+      lang:
+        - en
+        - fr
 
 nav:
   - "Matrix": Matrix.md
