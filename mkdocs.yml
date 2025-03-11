@@ -3,19 +3,30 @@ site_url: https://sirmrmanuel0.github.io/usefull_utility_py/
 theme:
   name: material
   features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotation
     - content.code.copy
-    - content.code.select
   palette:
     # Palette toggle for dark mode
     - scheme: slate
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
+        primary: deep purple
+        accent: deep purple
     # Palette toggle for light mode
     - scheme: default
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
+        primary: light blue
+        accent: light blue
 
 plugins:
   - mkdocstrings
