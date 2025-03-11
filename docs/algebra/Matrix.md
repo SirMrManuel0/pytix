@@ -57,7 +57,7 @@ print(Matrix.create_identity_matrix(2))
 ]
 ```
 
-## rotation matrix 2D
+# rotation matrix 2D
 ### `classmethod`
 Creates a rotation matrix (counterclockwise) for a 2D vector.
 
@@ -76,7 +76,7 @@ print(Matrix.create_rotation_matrix_2D(90))
 ]
 ```
 
-## rotation matrix 3D
+# rotation matrix 3D
 ### `classmethod`
 Creates a rotation matrix (counterclockwise) for a 3D vector.
 
@@ -106,7 +106,7 @@ print(Matrix.create_rotation_matrix_3D(90, Axis.X))
 ```
 
 
-## invers
+# invers
 ### `classmethod`
 Creates the inverse matrix for the matrix.
 
