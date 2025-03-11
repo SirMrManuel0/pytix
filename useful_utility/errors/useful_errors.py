@@ -56,6 +56,7 @@ class ArgumentCodes(Enum):
     NOT_AXIS: int = 15
     NOT_VECTOR3D: int = 16
     NOT_VECTOR: int = 17
+    NOT_MATRIX: int = 18
 
 # current max: 21
 class ArgumentError(BaseError):

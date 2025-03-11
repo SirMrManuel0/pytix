@@ -9,7 +9,89 @@ from useful_utility.algebra.statics import rnd
 
 
 class Vector(Matrix):
+    """
+        The Vector-class inherits from the Matrix class. It is a simple n-dimensional vector.
+
+        La classe Vecteur hérite de la classe Matrice. Il s'agit d'un simple vecteur à n dimensions.
+
+        Methods:
+            __init__(coordinates: list, dimension: int = 2):
+                Initializes the vector with the given coordinates and dimension.
+
+            cross(vec: Vector) -> Vector:
+                Computes the cross product of the vector with another 3D vector.
+
+            from_matrix(matrix: Matrix) -> Vector:
+                Creates a vector from a single-row matrix.
+
+            get_dimension() -> int:
+                Returns the dimension of the vector.
+
+            get_component(index: int) -> float:
+                Returns the component at the specified index.
+
+            set_component(index: int, value: int | float | np.float64) -> None:
+                Sets the component at the specified index.
+
+            set_data(new: list) -> None:
+                Sets the vector data with the provided list.
+
+            get_data() -> np.ndarray:
+                Returns the vector's data as a NumPy array.
+
+            length() -> float:
+                Returns the magnitude (length) of the vector.
+
+            __add__(other: Matrix) -> Vector:
+                Adds another vector or matrix to the current vector.
+
+            __radd__(other: Matrix) -> Vector:
+                Right-hand addition for vectors or matrices.
+
+            __sub__(other: Matrix) -> Vector:
+                Subtracts another vector or matrix from the current vector.
+
+            __rsub__(other: Matrix) -> Vector:
+                Right-hand subtraction for vectors or matrices.
+
+            __mul__(other: Vector | int | float) -> Vector | float:
+                Multiplies the vector with another vector (dot product) or scalar.
+
+            __rmul__(other: Matrix | Vector | int | float) -> Vector:
+                Right-hand multiplication for vectors or scalars.
+
+            __imul__(other: Matrix | int | float) -> Vector:
+                In-place multiplication for vectors or scalars.
+
+            __truediv__(other: int | float) -> Vector:
+                Divides the vector by a scalar value.
+
+            __pow__(power, modulo=None):
+                Raises an error, as exponentiation is not defined for vectors.
+
+            __str__() -> str:
+                Returns a string representation of the vector.
+
+            __repr__() -> str:
+                Returns a detailed string representation of the vector.
+
+            copy() -> Vector:
+                Returns a copy of the vector.
+
+            __iter__():
+                Allows iteration over the vector components.
+
+    """
     def __init__(self, coordinates=None, dimension: Types.INT.value = 2):
+        """
+        Creates a vector.
+
+        Crée un vecteur.
+
+        Args:
+            coordinates (list): A list of the coordinates for the vector.
+            dimension (int): The dimension of the vector. (default 2; or len(coordinates))
+        """
         assertion.assert_types(dimension, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
         assertion.assert_is_positiv(dimension, ArgumentError, code=ArgumentCodes.NOT_POSITIV)
         assertion.assert_not_zero(dimension, ArgumentError, code=ArgumentCodes.ZERO)
@@ -30,6 +112,21 @@ class Vector(Matrix):
         super().__init__(d, dimension, 1)
 
     def cross(self, vec: Self) -> Self:
+        """
+            Computes the cross product of the vector with another 3D vector.
+
+            Calcule le produit vectoriel de 2 vecteurs.
+
+            Args:
+                vec (Vector): The vector to compute the cross product with.
+
+            Raises:
+                ArgumentError: If `vec` is not of type Vector.
+                MathError: If either vector does not have a dimension of 3.
+
+            Returns:
+                Vector: The resulting vector from the cross product.
+        """
         assertion.assert_type(vec, Vector, ArgumentError, code=ArgumentCodes.NOT_VECTOR)
         assertion.assert_equals(vec.get_dimension(), 3, MathError, code=MathCodes.UNFIT_DIMENSIONS)
         assertion.assert_equals(self.get_dimension(), 3, MathError, code=MathCodes.UNFIT_DIMENSIONS)
@@ -43,6 +140,22 @@ class Vector(Matrix):
 
     @classmethod
     def from_matrix(cls, matrix: Matrix) -> Self:
+        """
+        Transforms a matrix into a vector.
+
+        Transforme une matrice en un vecteur.
+
+        Args:
+            matrix (Matrix): The Matrix to transform into a vector.
+
+        Raises:
+            ArgumentError: If `matrix` is not of type Matrix.
+            ArgumentError: If either matrix does not have 1 row.
+
+        Returns:
+            Vector: The resulting vector from the transformation.
+        """
+        assertion.assert_type(matrix, Matrix, ArgumentError, code=ArgumentCodes.NOT_MATRIX)
         assertion.assert_equals(matrix.get_rows(), 1, ArgumentError,
                                 code=ArgumentCodes.MISMATCH_DIMENSION)
         coordinates: list = list()

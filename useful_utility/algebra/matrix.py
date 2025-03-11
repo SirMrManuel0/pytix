@@ -177,7 +177,6 @@ class Matrix:
             data (list): A 2D array which holds the components
             columns (int): the number of columns (default 2; If none are given, columns = len(data))
             rows (int): the number of rows (default 2; If none are given, rows = len(data[0]))
-
         """
         default_data: bool = False
         if data is None:

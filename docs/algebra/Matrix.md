@@ -1,4 +1,4 @@
-# Documentation for `Matrix`
+# `Matrix`
 
 ::: useful_utility.algebra.Matrix
     handler: python
