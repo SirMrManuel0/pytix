@@ -4,6 +4,7 @@ theme:
   name: material
   features:
     - content.code.copy
+    - content.code.select
   palette:
     # Palette toggle for dark mode
     - scheme: slate
