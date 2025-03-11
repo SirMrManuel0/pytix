@@ -73,12 +73,12 @@ class Matrix:
     A class representing a mathematical matrix with various operations like addition, subtraction, multiplication,
     and more. The matrix can be created from a 2D list of numbers or initialized as a zero matrix. It supports
     operations with other matrices and scalar values, and provides methods for accessing and modifying matrix
-    components.
+    components. This matrix is iterable.
 
     Une classe qui représente une matrice mathématique. Elle a différentes méthodes comme l'addition, la soustraction,
     multiplication et plus encore. La matrice peut être créée à partir d'une liste de nombres en 2D ou initialisée en
     tant que matrice zéro. Elle prend en charge les opérations avec d'autres matrices et valeurs scalaires, et fournit
-    des méthodes pour accéder aux composants de la matrice et les modifier.
+    des méthodes pour accéder aux composants de la matrice et les modifier. Cette matrice est itérable.
 
     Attributes:
         _data (np.ndarray): A NumPy array holding the matrix data.
@@ -109,6 +109,9 @@ class Matrix:
 
         set_components(data: list | np.ndarray):
             Sets the matrix data with the provided list or NumPy array.
+
+        get_invers():
+            Returns an invers matrix
 
         copy():
             Returns a copy of the matrix.
@@ -160,6 +163,9 @@ class Matrix:
 
         __repr__():
             Returns a string representation of the matrix.
+
+        __iter__():
+            The class is iterable.
     """
     def __init__(self, data: list = None, columns: Types.INT.value = 2, rows: Types.INT.value = 2):
         default_data: bool = False
@@ -368,6 +374,17 @@ class Matrix:
         return Matrix(matrix)
 
     def get_invers(self) -> Optional[Self]:
+        """
+        Creates the inverse matrix for the matrix.
+
+        Crée une matrice inverse pour la matrice.
+
+        Returns:
+            An invers matrix (Matrix)
+
+        Raises:
+            MathError: if the matrix is not quadratic
+        """
         assertion.assert_equals(self._columns, self._rows, MathError, code=MathCodes.UNFIT_DIMENSIONS)
         if np.linalg.det(self.get_components()) != 0:
             invers: np.ndarray = np.linalg.inv(self.get_components())

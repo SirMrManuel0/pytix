@@ -19,3 +19,9 @@ plugins:
 
 nav:
   - "Matrix": Matrix.md
+
+features:
+  - content.code.copy
+
+extra_javascript:
+  - assets/copy.js
