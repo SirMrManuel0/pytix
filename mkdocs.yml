@@ -12,6 +12,7 @@ theme:
     - content.tabs.link
     - content.code.annotation
     - content.code.copy
+  language: en
   palette:
     # Palette toggle for dark mode
     - scheme: slate
@@ -36,5 +37,19 @@ plugins:
         - en
         - fr
 
-nav:
-  - "Matrix": Matrix.md
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - admonition
+  - pymdownx.arithmatex:
+      generic: true
+  - footnotes
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.mark
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
