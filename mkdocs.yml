@@ -2,6 +2,8 @@ site_name: Useful Utility
 site_url: https://sirmrmanuel0.github.io/usefull_utility_py/
 theme:
   name: material
+  features:
+    - content.code.copy
   palette:
     # Palette toggle for dark mode
     - scheme: slate
@@ -19,9 +21,3 @@ plugins:
 
 nav:
   - "Matrix": Matrix.md
-
-features:
-  - content.code.copy
-
-extra_javascript:
-  - assets/copy.js
