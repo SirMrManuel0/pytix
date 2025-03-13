@@ -12,7 +12,7 @@ class Equation:
     C'est la classe de base pour toutes les équations. Elle dois être héritée.
     """
     def __init__(self, equation: str, parameters: AllLists) -> None:
-        self._equation: str = ""
+        self._equation: str = equation
         self._parameters: list = list(parameters)
 
     def get_equation(self) -> str:
@@ -43,9 +43,12 @@ class Polynomial(Equation):
         assertion.assert_types(parameters, (*TypesTuple.LISTS.value, *TypesTuple.TUPLE.value), ArgumentError,
                                code=ArgumentCodes.NOT_LISTS_TUPLE)
         assertion.assert_types_list(parameters, TypesTuple.NUMBER.value, ArgumentError, code=ArgumentCodes.NOT_NUMBER)
-        assertion.assert_range(len(parameters), 1, degree + 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+        if degree == 0:
+            assertion.assert_below(len(parameters), 2, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+        else:
+            assertion.assert_range(len(parameters), 1, degree + 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
         assertion.assert_type(integrate_derive, bool, ArgumentError, code=ArgumentCodes.NOT_BOOl)
-
+        parameters = list(parameters)
         while len(parameters) < degree + 1:
             parameters.append(0)
 
@@ -69,6 +72,11 @@ class Polynomial(Equation):
         :rtype AllLists:
         :return: The string of the polynome.
         """
+        assertion.assert_types(degree, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
+        assertion.assert_types(parameters, (*TypesTuple.TUPLE.value, TypesTuple.LISTS.value), ArgumentError,
+                               code=ArgumentCodes.NOT_LISTS_TUPLE)
+        assertion.assert_types_list(parameters, TypesTuple.NUMBER.value, ArgumentError, code=ArgumentCodes.NOT_NUMBER)
+
         equation: str = ""
         for power in range(degree, -1, -1):
             index: int = int(degree - power)
@@ -123,6 +131,7 @@ class Polynomial(Equation):
         if not imaginary:
             roots: list = [r.real for r in roots if np.isreal(r)]
             roots: list = [rnd(root) for root in roots]
+            roots: list = sorted(roots)
         return tuple(roots)
 
     def get_local_maximum(self) -> list[tuple[float, float]]:
@@ -170,6 +179,23 @@ class Polynomial(Equation):
             return 1 if matters > 0 else -1
         return -1 if matters > 0 else 1
 
+    def get_derivative(self, number: Int = 1) -> Self:
+        assertion.assert_types(number, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
+        assertion.assert_is_positiv(number, MathError, code=MathCodes.NOT_POSITIV)
+        assertion.assert_not_zero(number, MathError, code=MathCodes.ZERO)
+
+        if number == 1:
+            return self._derivative_1.copy()
+        elif number == 2:
+            return self._derivative_2.copy()
+        elif number == 3:
+            return self._derivative_3.copy()
+        else:
+            return self._derive(number)
+
+    def copy(self) -> Self:
+        return Polynomial(self._degree, self.get_parameters())
+
     def _integrate(self, amount: Int = 1) -> Self:
         integrated_parameters: list = list()
         integrated_degree: int = self._degree + 1
@@ -177,19 +203,37 @@ class Polynomial(Equation):
             if parameter == 0:
                 continue
             integrated_parameters.append(rnd(parameter / (integrated_degree - index)))
+        if len(integrated_parameters) == 0:
+            return Polynomial(0, [0], False)
         return Polynomial(integrated_degree, integrated_parameters, False)
 
     def _derive(self, amount: int = 1) -> Self:
-        derived_parameters: list = list()
-        derived_degree: int = self._degree - 1
-        parameters: list = self.get_parameters()
-        if len(self._parameters) == self._degree + 1:
-            parameters: list = parameters[:-1]
-        for index, parameter in enumerate(self._parameters):
-            if parameter == 0:
-                continue
-            derived_parameters.append(rnd(parameter * (derived_degree - index)))
-        return Polynomial(derived_degree, derived_parameters, False)
+        paras: list = self.get_parameters()
+        for a in range(1, amount + 1):
+            derived_parameters: list = list()
+            derived_degree: int = self._degree - a
+            if self._degree == 0 or derived_degree + 1 == 0:
+                return Polynomial(0, [0], False)
+            parameters: list = paras
+            if len(parameters) == self._degree + 1:
+                parameters: list = parameters[:-1]
+            for index, parameter in enumerate(parameters):
+                if parameter == 0:
+                    continue
+                derived_parameters.append(rnd(parameter * (derived_degree + 1 - index)))
+            paras: list = derived_parameters
+            while paras[-1] == 0:
+                paras = paras[:-1]
+        return Polynomial(self._degree - amount, paras, False)
 
+    def __eq__(self, other: Self) -> bool:
+        assertion.assert_type(other, Polynomial, ArgumentError, code=ArgumentCodes.NOT_POLYNOMIAL)
+        return self._degree == other.get_degree() and self._parameters == other.get_parameters()
+
+    def __str__(self):
+        return self._equation
+
+    def __repr__(self):
+        return f"Polynomial at {hex(id(self))} with: {self._equation}"
 
 

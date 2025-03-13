@@ -50,6 +50,7 @@ class ArgumentCodes(Enum):
     NOT_MATRIX: int = 18
     NOT_LISTS_TUPLE: int = 19
     NOT_BOOl: int = 20
+    NOT_POLYNOMIAL: int = 21
 
 class ArgumentError(BaseError):
     def __init__(self, code: ArgumentCodes, msg="", wrong_argument=None, right_argument=None):
