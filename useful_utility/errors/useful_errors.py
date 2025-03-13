@@ -13,15 +13,6 @@ class TypesTuple(Enum):
     ND_ARRAY: tuple = (np.ndarray,)
     LISTS: tuple = (*LIST, *ND_ARRAY)
 
-class Types(Enum):
-    INT: type = Union[int, np.integer]
-    FLOAT: type = Union[float, np.floating]
-    NUMBER: type = Union[int, np.integer, float, np.floating]
-    LIST: type = Union[list]
-    TUPLE: type = Union[tuple]
-    ND_ARRAY: type = Union[np.ndarray]
-    LISTS: type = Union[list, np.ndarray]
-
 class BaseCodes(Enum):
     NONE: int = 0
     TODO: int = 1
