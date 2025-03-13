@@ -14,13 +14,13 @@ class TypesTuple(Enum):
     LISTS: tuple = (*LIST, *ND_ARRAY)
 
 class Types(Enum):
-    INT: type = Union[*TypesTuple.INT.value]
-    FLOAT: type = Union[*TypesTuple.FLOAT.value]
-    NUMBER: type = Union[*TypesTuple.NUMBER.value]
-    LIST: type = Union[*TypesTuple.LIST.value]
-    TUPLE: type = Union[*TypesTuple.TUPLE.value]
-    ND_ARRAY: type = Union[*TypesTuple.ND_ARRAY.value]
-    LISTS: type = Union[*TypesTuple.LISTS.value]
+    INT: type = Union[int, np.integer]
+    FLOAT: type = Union[float, np.floating]
+    NUMBER: type = Union[int, np.integer, float, np.floating]
+    LIST: type = Union[list]
+    TUPLE: type = Union[tuple]
+    ND_ARRAY: type = Union[np.ndarray]
+    LISTS: type = Union[list, np.ndarray]
 
 class BaseCodes(Enum):
     NONE: int = 0

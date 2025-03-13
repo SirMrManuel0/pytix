@@ -82,7 +82,7 @@ class Vector(Matrix):
                 Allows iteration over the vector components.
 
     """
-    def __init__(self, coordinates=None, dimension: Types.INT.value = 2):
+    def __init__(self, coordinates=None, dimension: Union[int, np.integer] = 2):
         """
         Creates a vector.
 
@@ -168,17 +168,17 @@ class Vector(Matrix):
         return len(self._data)
 
     @override
-    def get_component(self, index: Types.INT.value) -> float:
+    def get_component(self, index: Union[int, np.integer]) -> float:
         assertion.assert_types(index, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
         assertion.assert_range(index, 0, self.get_dimension() - 1, ArgumentError,
                                code=ArgumentCodes.OUT_OF_RANGE)
         return float(self._data[index][0])
 
     @override
-    def set_component(self, index: Types.INT.value, value: Types.NUMBER.value) -> None:
+    def set_component(self, index: Union[int, np.integer], value: Union[int, np.integer, float, np.floating]) -> None:
         super().set_component(index, 1, value)
 
-    def set_data(self, new: Types.LISTS.value) -> None:
+    def set_data(self, new: Union[list, np.ndarray]) -> None:
         assertion.assert_types(new, TypesTuple.LISTS.value, ArgumentError,
                                code=ArgumentCodes.NOT_LISTS)
         assertion.assert_types_list(new, TypesTuple.NUMBER.value, ArgumentError, code=ArgumentCodes.NOT_NUMBER)
@@ -254,7 +254,7 @@ class Vector(Matrix):
         return super().__imul__(other)
 
     @override
-    def __truediv__(self, other: Types.NUMBER.value) -> Self:
+    def __truediv__(self, other: Union[int, np.integer, float, np.floating]) -> Self:
         div: Matrix = super().__truediv__(other)
         return Vector.from_matrix(div)
 

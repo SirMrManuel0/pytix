@@ -167,7 +167,7 @@ class Matrix:
         __iter__():
             The class is iterable.
     """
-    def __init__(self, data: list = None, columns: Types.INT.value = 2, rows: Types.INT.value = 2):
+    def __init__(self, data: list = None, columns: Union[int, np.integer] = 2, rows: Union[int, np.integer] = 2):
         """
         Creates a 2D Matrix.
 
@@ -236,7 +236,7 @@ class Matrix:
     def get_dimension(self) -> tuple:
         return self._columns, self._rows
 
-    def get_component(self, column: Types.INT.value, row: Types.INT.value) -> float:
+    def get_component(self, column: Union[int, np.integer], row: Union[int, np.integer]) -> float:
         assertion.assert_types(column, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
         assertion.assert_types(row, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
 
@@ -246,7 +246,7 @@ class Matrix:
         row = int(row)
         return float(self._data[column][row])
 
-    def set_component(self, column: Types.INT.value, row: Types.INT.value, value: Types.NUMBER.value) -> None:
+    def set_component(self, column: Union[int, np.integer], row: Union[int, np.integer], value: Union[int, np.integer, float, np.floating]) -> None:
         assertion.assert_types(column, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
         assertion.assert_types(row, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
         assertion.assert_types(value, TypesTuple.NUMBER.value, ArgumentError, code=ArgumentCodes.NOT_NUMBER)
@@ -258,7 +258,7 @@ class Matrix:
     def get_components(self) -> np.ndarray:
         return self._data.copy()
 
-    def set_components(self, data: Types.LISTS.value) -> None:
+    def set_components(self, data: Union[list, np.ndarray]) -> None:
         assertion.assert_types(data, TypesTuple.LISTS.value, ArgumentError,
                                code=ArgumentCodes.NOT_LISTS)
         if len(data) > 0:
@@ -317,7 +317,7 @@ class Matrix:
         return Matrix(data=list(identity_matrix))
 
     @classmethod
-    def create_rotation_matrix_2D(cls, theta: Types.NUMBER.value) -> Self:
+    def create_rotation_matrix_2D(cls, theta: Union[int, np.integer, float, np.floating]) -> Self:
         """
         Creates a rotation matrix (counterclockwise) for a 2D vector.
 
@@ -341,7 +341,7 @@ class Matrix:
         ])
 
     @classmethod
-    def create_rotation_matrix_3D(cls, theta: Types.NUMBER.value, axis: Axis) -> Self:
+    def create_rotation_matrix_3D(cls, theta: Union[int, np.integer, float, np.floating], axis: Axis) -> Self:
         """
         Creates a rotation matrix (counterclockwise) for a 3D vector.
 
@@ -547,20 +547,20 @@ class Matrix:
             self.set_components(multiplied.get_components())
         return self
 
-    def __truediv__(self, other: Types.NUMBER.value) -> Self:
+    def __truediv__(self, other: Union[int, np.integer, float, np.floating]) -> Self:
         assertion.assert_types(other, TypesTuple.NUMBER.value, MathError,
                                code=MathCodes.NOT_NUMBER)
         assertion.assert_not_zero(other, MathError, code=MathCodes.ZERO, msg="Division by Zero is not defined.")
         return self * (1/other)
 
-    def __itruediv__(self, other: Types.NUMBER.value) -> Self:
+    def __itruediv__(self, other: Union[int, np.integer, float, np.floating]) -> Self:
         assertion.assert_types(other, TypesTuple.NUMBER.value, MathError,
                                code=MathCodes.NOT_NUMBER)
         dived: Matrix = self / other
         self.set_components(dived.get_components())
         return self
 
-    def __pow__(self, power: Types.INT.value, modulo=None) -> Self:
+    def __pow__(self, power: Union[int, np.integer], modulo=None) -> Self:
         assertion.assert_false(modulo, MathCodes, code=MathCodes.NOT_FALSE, msg="Modulo not defined.")
         assertion.assert_types(power, TypesTuple.INT.value, MathError, code=MathCodes.NOT_INT)
         assertion.assert_is_positiv(power, MathError, code=MathCodes.NOT_POSITIV)
@@ -569,7 +569,7 @@ class Matrix:
             multiplied *= self
         return multiplied
 
-    def __ipow__(self, other: Types.INT.value) -> Self:
+    def __ipow__(self, other: Union[int, np.integer]) -> Self:
         multiplied: Matrix = self ** other
         self.set_components(multiplied.get_components())
         return self
