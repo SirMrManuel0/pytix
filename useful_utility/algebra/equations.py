@@ -161,6 +161,15 @@ class Polynomial(Equation):
                 infliction_points.append((root, self.y_at_x(root)))
         return infliction_points
 
+    def limit_infinity(self, plus_inf: bool = True) -> int:
+        assertion.assert_type(plus_inf, bool, ArgumentError, code=ArgumentCodes.NOT_BOOl)
+        matters: float = float(self._parameters[0])
+        if plus_inf:
+            return 1 if matters > 0 else -1
+        if self._degree % 2 == 0:
+            return 1 if matters > 0 else -1
+        return -1 if matters > 0 else 1
+
     def _integrate(self, amount: Int = 1) -> Self:
         integrated_parameters: list = list()
         integrated_degree: int = self._degree + 1
