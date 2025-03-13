@@ -8,6 +8,7 @@ __all__ = [
     "BaseCodes",
     "MathCodes",
     "ArgumentCodes",
+    "StateError",
     "TODO",
     "TypesTuple",
     "assertion"

@@ -48,8 +48,9 @@ class ArgumentCodes(Enum):
     NOT_VECTOR3D: int = 16
     NOT_VECTOR: int = 17
     NOT_MATRIX: int = 18
+    NOT_LISTS_TUPLE: int = 19
+    NOT_BOOl: int = 20
 
-# current max: 21
 class ArgumentError(BaseError):
     def __init__(self, code: ArgumentCodes, msg="", wrong_argument=None, right_argument=None):
         super().__init__(code, msg, wrong_argument, right_argument, "Argument Error")
@@ -69,10 +70,13 @@ class MathCodes(Enum):
     NOT_VECTOR_NUMBER: int = 11
     VECTOR: int = 12
 
-# current max: 1
 class MathError(BaseError):
     def __init__(self, code: MathCodes, msg="", wrong_argument=None, right_argument=None):
         super().__init__(code, msg, wrong_argument, right_argument, "Math Error")
+
+class StateError(BaseError):
+    def __init__(self, msg=""):
+        super().__init__(BaseCodes.NONE, msg, None, None, "State Error")
 
 def TODO(func):
     def wrapper(*args, **kwargs):
