@@ -7,6 +7,20 @@ Une classe qui représente une matrice mathématique. Elle a différentes métho
 
 Examples:
 
+Access Components:
+```python
+from useful_utility.algebra import Matrix
+
+m: Matrix = Matrix([[1, 2], [3, 4]])
+
+print(m[0][1])
+print(m[-1][-1])
+```
+```title="output"
+2
+4
+```
+
 
 Equal:
 ```python
@@ -16,13 +30,9 @@ m: Matrix = Matrix([[1, 2], [3, 4]])
 n: Matrix = Matrix([[1, 2], [3, 4]])
 
 print(n == m)
-print(m[0][1])
-print(m[-1][-1])
 ```
 ```title="output"
 True
-2
-4
 ```
 
 
