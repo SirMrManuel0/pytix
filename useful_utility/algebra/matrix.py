@@ -1,11 +1,13 @@
 import math
-from typing import override, Optional, Self, Union
+from typing import override, Optional, Self, Union, List
 from enum import Enum
+from warnings import deprecated
+
 import numpy as np
 
 from useful_utility.algebra.statics import rnd
 from useful_utility.errors import ArgumentError, MathError, ArgumentCodes, assertion, MathCodes, TypesTuple
-from useful_utility.types import Number, Int, Lists
+from useful_utility.types import Number, Int, Lists, AllLists
 
 def add_matrix(A, B):
     return [[A[i][j] + B[i][j] for j in range(len(A))] for i in range(len(A))]
@@ -168,7 +170,7 @@ class Matrix:
         __iter__():
             The class is iterable.
     """
-    def __init__(self, data: list = None, columns: Int = 2, rows: Int = 2):
+    def __init__(self, data: list = None, rows: Int = 2, columns: Int = 2):
         """
         Creates a 2D Matrix.
 
@@ -176,8 +178,8 @@ class Matrix:
 
         Args:
             data (list): A 2D array which holds the components
-            columns (int): the number of columns (default 2; If none are given, columns = len(data))
-            rows (int): the number of rows (default 2; If none are given, rows = len(data[0]))
+            columns (int): the number of columns (default 2; If none are given, columns = len(data[0]))
+            rows (int): the number of rows (default 2; If none are given, rows = len(data))
         """
         default_data: bool = False
         if data is None:
@@ -213,20 +215,20 @@ class Matrix:
         self._rows: int = int(rows)
         self._columns: int = int(columns)
 
-        if not default_data and rows == 2:
-            self._rows: int = len(data[0])
-        elif not default_data and len(data) > 0 and rows != len(data[0]):
-            self._rows: int = len(data[0])
-        elif not default_data and len(data) == 0:
-            self._rows: int = 0
         if not default_data and columns == 2:
-            self._columns: int = len(data)
-        elif not default_data and columns != len(data):
-            self._columns: int = len(data)
+            self._columns: int = len(data[0])
+        elif not default_data and len(data) > 0 and rows != len(data[0]):
+            self._columns: int = len(data[0])
+        elif not default_data and len(data) == 0:
+            self._columns: int = 0
+        if not default_data and rows == 2:
+            self._rows: int = len(data)
+        elif not default_data and rows != len(data):
+            self._rows: int = len(data)
 
         self._data = np.array(data)
         if default_data and (rows != 2 or columns != 2):
-            self._data = np.zeros(shape=(self._columns, self._rows))
+            self._data = np.zeros(shape=(self._rows, self._columns))
 
     def get_rows(self) -> int:
         return self._rows
@@ -235,26 +237,27 @@ class Matrix:
         return self._columns
 
     def get_dimension(self) -> tuple:
-        return self._columns, self._rows
+        return self._rows, self._columns
 
-    def get_component(self, column: Int, row: Int) -> float:
+    @deprecated("Use matrix[i][j] instead.")
+    def get_component(self, row: Int, column: Int) -> float:
         assertion.assert_types(column, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
         assertion.assert_types(row, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
 
-        assertion.assert_range(column, 0, len(self._data) - 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
-        assertion.assert_range(row, 0, len(self._data[column]) - 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+        assertion.assert_range(row, 0, len(self._data) - 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+        assertion.assert_range(column, 0, len(self._data[row]) - 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
         column = int(column)
         row = int(row)
-        return float(self._data[column][row])
+        return float(self._data[row][column])
 
-    def set_component(self, column: Int, row: Int, value: Number) -> None:
+    def set_component(self, row: Int, column: Int, value: Number) -> None:
         assertion.assert_types(column, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
         assertion.assert_types(row, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
         assertion.assert_types(value, TypesTuple.NUMBER.value, ArgumentError, code=ArgumentCodes.NOT_NUMBER)
 
-        assertion.assert_range(column, 0, len(self._data) - 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
-        assertion.assert_range(row, 0, len(self._data[column]) - 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
-        self._data[column][row] = value
+        assertion.assert_range(row, 0, len(self._data) - 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+        assertion.assert_range(column, 0, len(self._data[row]) - 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+        self._data[row][column] = value
 
     def get_components(self) -> np.ndarray:
         return self._data.copy()
@@ -281,12 +284,12 @@ class Matrix:
             for d in data:
                 copy_.append([d])
             data = copy_
-        if len(data) != self._columns:
-            self._columns = len(data)
-        if len(data) > 0 and len(data[0]) != self._rows:
-            self._rows = len(data[0])
+        if len(data) != self._rows:
+            self._rows = len(data)
+        if len(data) > 0 and len(data[0]) != self._columns:
+            self._columns = len(data[0])
         elif len(data[0]) == 0:
-            self._rows = 0
+            self._columns = 0
         self._data = np.array(data)
 
     def copy(self) -> Self:
@@ -402,7 +405,7 @@ class Matrix:
             return Matrix(data=list(invers))
         return None
 
-    def __eq__(self, other: Union[np.ndarray, Self]) -> bool:
+    def __eq__(self, other: Union[AllLists, Self]) -> bool:
         if isinstance(other, Matrix):
             if self.get_rows() != other.get_rows() and self.get_columns() != other.get_columns():
                 return False
@@ -419,8 +422,23 @@ class Matrix:
             for column in bools:
                 fin.append(all(column))
             return all(fin)
-        raise ArgumentError(ArgumentCodes.NOT_MATRIX_NP_ARRAY,
-                            msg="Only matrices or np.ndarray can be compared.", wrong_argument=type(other))
+        elif isinstance(other, (*TypesTuple.LISTS.value, *TypesTuple.TUPLE.value)):
+            other = list(other)
+            for i in other:
+                if not isinstance(i, (*TypesTuple.LISTS.value, *TypesTuple.TUPLE.value)):
+                    return False
+
+            if len(other) != len(self._data) or len(other[0]) != len(other[0]):
+                return False
+            for i in other:
+                if len(i) != len(other[0]):
+                    return False
+            for i in range(len(other)):
+                for j in range(len(other[0])):
+                    if other[i][j] != self._data[i][j]:
+                        return False
+            return True
+        return False
 
     def __add__(self, other: Self) -> Self:
         assertion.assert_type(other, Matrix, MathError, code=MathCodes.NOT_MATRIX,
@@ -467,9 +485,9 @@ class Matrix:
         multiplied: Matrix = Matrix()
 
         if isinstance(other, Matrix):
-            assertion.assert_equals(self.get_rows(), other.get_columns(), MathError,
+            assertion.assert_equals(self.get_columns(), other.get_rows(), MathError,
                                     code=MathCodes.UNFIT_DIMENSIONS,
-                                    msg="Rows of self do not equal columns of other.")
+                                    msg="Columns of self do not equal rows of other.")
 
             a: list = list(self.get_components())
             b: list = list(other.get_components())
@@ -509,7 +527,7 @@ class Matrix:
         multiplied: Matrix = Matrix()
 
         if isinstance(other, Matrix):
-            assertion.assert_equals(other.get_rows(), self.get_columns(), MathError,
+            assertion.assert_equals(other.get_columns(), self.get_rows(), MathError,
                                     code=MathCodes.UNFIT_DIMENSIONS,
                                     msg="Rows of self do not equal columns of other.")
 
@@ -583,3 +601,12 @@ class Matrix:
 
     def __iter__(self) -> iter:
         return iter(list(self.get_components()))
+
+    def __getitem__(self, item: Int) -> np.ndarray:
+        assertion.assert_types(item, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
+        if item >= 0:
+            assertion.assert_range(item, 0, len(self._data) - 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+            return self._data[item]
+        else:
+            assertion.assert_range(len(self._data) + item, 0, len(self._data) - 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+            return self._data[len(self._data) + item]

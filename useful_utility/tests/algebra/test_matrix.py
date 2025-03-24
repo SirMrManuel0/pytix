@@ -21,7 +21,6 @@ def test_init():
         Matrix(rows=0)
         Matrix(data=["a"])
 
-
 def test_set_components():
     m = Matrix([[1, 2], [1, 2]], 2, 2)
     m.set_components([[1, 1], [1, 2]])
@@ -43,12 +42,10 @@ def test_set_components():
         m.set_components(1)
         m.set_components(["a", 2])
 
-
 def test_copy():
     m = Matrix([1, 2])
     v = m.copy()
     assert id(v) != id(m)
-
 
 def test_create_identity_matrix():
     m = Matrix.create_identity_matrix()
@@ -58,7 +55,6 @@ def test_create_identity_matrix():
         Matrix.create_identity_matrix(1.06)
         Matrix.create_identity_matrix("1.061.06")
         Matrix.create_identity_matrix([1])
-
 
 def test_add():
     m1 = Matrix([[1, 1], [1, 1]])
@@ -70,7 +66,6 @@ def test_add():
         m2 = Matrix([[1, 1], [1, 1]])
         _ = m1 + m2
         _ = m1 + 7
-
 
 def test_mul():
     m1 = Matrix([[3, 2], [1, 2]])
@@ -84,7 +79,6 @@ def test_mul():
         _ = m1 * "5"
         _ = "5" * m1
 
-
 def test_truediv():
     m1 = Matrix([[1, 1], [1, 1]])
     sc = 5
@@ -94,7 +88,6 @@ def test_truediv():
         _ = m1 / 0
         _ = m1 / m1
         _ = m1 / "5"
-
 
 def test_pow():
     m1 = Matrix([[2, 2], [2, 2]])
@@ -198,3 +191,43 @@ def test___iter__():
         for n in l:
             assert n in [1, 2, 3, 4]
 
+def test___getitem__():
+    m: Matrix = Matrix([[1, 2], [3, 4]])
+    assert m[0][1] == 2
+    assert m[-1][-1] == 4
+    with pytest.raises(ArgumentError):
+        a = m["1"][1]
+        a = m[0][5]
+        a = m[0][None]
+
+def test___setitem__():
+    m: Matrix = Matrix([[1, 2], [3, 4]])
+    m[0][1] = 3
+    assert m[0][1] == 3
+
+    with pytest.raises(ArgumentError):
+        m["1"][1] = 2
+        m[0][5] = 3
+        m[0][None] = 4
+        m[0][1] = "2"
+
+def test_eq():
+    m: Matrix = Matrix([[1, 2], [3, 4]])
+    n: Matrix = Matrix([[1, 2], [3, 4]])
+    b = m == n
+    assert b is True
+    m: Matrix = Matrix([[1, 2], [3, 4]])
+    n: list = [[1, 2], [3, 4]]
+    b = m == n
+    assert b is True
+    m: Matrix = Matrix([[1, 2], [3, 4]])
+    n: tuple = ((1, 2), (3, 4))
+    b = m == n
+    m: Matrix = Matrix([[1, 2], [3, 4]])
+    n: np.ndarray = np.array([[1, 2], [3, 4]])
+    b = m == n
+    assert b is True
+    m: Matrix = Matrix([[1, 2], [3, 4]])
+    n: str = "A"
+    b = m == n
+    assert b is False

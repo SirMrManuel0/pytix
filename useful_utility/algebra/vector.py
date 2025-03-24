@@ -1,4 +1,5 @@
 from typing import override, Self, Union
+from warnings import deprecated
 
 import numpy as np
 
@@ -157,7 +158,7 @@ class Vector(Matrix):
             Vector: The resulting vector from the transformation.
         """
         assertion.assert_type(matrix, Matrix, ArgumentError, code=ArgumentCodes.NOT_MATRIX)
-        assertion.assert_equals(matrix.get_rows(), 1, ArgumentError,
+        assertion.assert_equals(matrix.get_columns(), 1, ArgumentError,
                                 code=ArgumentCodes.MISMATCH_DIMENSION)
         coordinates: list = list()
         for component in matrix.get_components():
@@ -168,7 +169,7 @@ class Vector(Matrix):
     def get_dimension(self) -> int:
         return len(self._data)
 
-    @override
+    @deprecated("Use vector[i] instead.")
     def get_component(self, index: Int) -> float:
         assertion.assert_types(index, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
         assertion.assert_range(index, 0, self.get_dimension() - 1, ArgumentError,
@@ -278,3 +279,25 @@ class Vector(Matrix):
     @override
     def __iter__(self) -> iter:
         return iter(list(self.get_data()))
+
+    @override
+    def __getitem__(self, item: Int) -> Number:
+        assertion.assert_types(item, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
+        if item >= 0:
+            assertion.assert_range(item, 0, len(self._data) - 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+            return float(self._data[item][0])
+        else:
+            assertion.assert_range(len(self._data) + item, 0, len(self._data) - 1, ArgumentError,
+                                   code=ArgumentCodes.OUT_OF_RANGE)
+            return float(self._data[len(self._data) + item][0])
+
+    def __setitem__(self, index: Int, value: Number) -> None:
+        assertion.assert_types(index, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
+        assertion.assert_types(value, TypesTuple.NUMBER.value, ArgumentError, code=ArgumentCodes.NOT_NUMBER)
+        if index >= 0:
+            assertion.assert_range(index, 0, len(self._data) - 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+            self._data[index] = [value]
+        else:
+            assertion.assert_range(len(self._data) + index, 0, len(self._data) - 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+            self._data[len(self._data) + index] = [value]
+

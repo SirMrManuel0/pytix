@@ -89,3 +89,13 @@ def test___iter__():
     m: Vector = Vector([1, 2, 3, 4])
     for n in m:
         assert n in [1, 2, 3, 4]
+
+def test___getitem__():
+    v: Vector = Vector([1, 2, 3])
+    assert v[0] == 1
+    assert v[-1] == 3
+
+def test___setitem__():
+    v: Vector = Vector([1, 2, 3])
+    v[1] = 3
+    assert v[1] == 3

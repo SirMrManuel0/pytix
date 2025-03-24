@@ -11,10 +11,14 @@ from useful_utility.algebra import Vector
 v: Vector = Vector([1, 2, 3])
 
 print(v + v)
+print(v[0])
+print(v[-1])
 ```
 
 ```title="output"
 [2 4 6]
+1
+3
 ```
 
 ## cross

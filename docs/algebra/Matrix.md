@@ -16,9 +16,13 @@ m: Matrix = Matrix([[1, 2], [3, 4]])
 n: Matrix = Matrix([[1, 2], [3, 4]])
 
 print(n == m)
+print(m[0][1])
+print(m[-1][-1])
 ```
 ```title="output"
 True
+2
+4
 ```
 
 
