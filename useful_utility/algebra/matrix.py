@@ -1,10 +1,10 @@
 import math
 from typing import override, Optional, Self, Union, List
 from enum import Enum
-from warnings import deprecated
 
 import numpy as np
 
+from useful_utility.errors import deprecated
 from useful_utility.algebra.statics import rnd
 from useful_utility.errors import ArgumentError, MathError, ArgumentCodes, assertion, MathCodes, TypesTuple
 from useful_utility.types import Number, Int, Lists, AllLists

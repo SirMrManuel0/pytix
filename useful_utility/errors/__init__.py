@@ -1,5 +1,6 @@
 from useful_utility.errors.useful_errors import *
 from useful_utility.errors import assertion
+from useful_utility.errors.decorator import deprecated, TODO
 
 __all__ = [
     "ArgumentError",
@@ -11,5 +12,6 @@ __all__ = [
     "StateError",
     "TODO",
     "TypesTuple",
-    "assertion"
+    "assertion",
+    "deprecated"
 ]

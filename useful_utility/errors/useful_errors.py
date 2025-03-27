@@ -79,7 +79,3 @@ class StateError(BaseError):
     def __init__(self, msg=""):
         super().__init__(BaseCodes.NONE, msg, None, None, "State Error")
 
-def TODO(func):
-    def wrapper(*args, **kwargs):
-        raise BaseError(BaseCodes.TODO, "This function has yet to be fully or partially implemented!")
-    return wrapper

@@ -1,10 +1,10 @@
 from typing import override, Self, Union
-from warnings import deprecated
 
 import numpy as np
 
 from useful_utility.errors import ArgumentError, MathError, assertion
 from useful_utility.errors import ArgumentCodes,  MathCodes, TODO, TypesTuple
+from useful_utility.errors import deprecated
 from useful_utility.algebra.matrix import Matrix
 from useful_utility.algebra.statics import rnd
 from useful_utility.types import Number, Int, Lists
