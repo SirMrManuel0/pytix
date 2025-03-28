@@ -117,3 +117,15 @@ def test_rand_choice():
     assert 0 <= v.rand_choice(1) <= 4
     assert 0 <= v.rand_choice(.1) <= 4
     assert 0 <= v.rand_choice(-.1) <= 4
+
+def test_max():
+    v: Vector = Vector([1, 2, 3, 5])
+    assert v.max() == 5
+
+def test_min():
+    v: Vector = Vector([1, 2, 3, 5])
+    assert v.min() == 1
+
+def test_sum():
+    v: Vector = Vector([1, 2, 3, 5])
+    assert v.sum() == 11

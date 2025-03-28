@@ -251,6 +251,24 @@ class Vector(Matrix):
 
         return int(np.random.choice(len(probs), p=scaled_probs))
 
+    def max(self) -> float:
+        max_: float = float(self[0])
+        for val in self:
+            max_ = max(max_, float(val))
+        return float(max_)
+
+    def min(self) -> float:
+        min_: float = float(self[0])
+        for val in self:
+            min_ = min(min_, float(val))
+        return float(min_)
+
+    def sum(self) -> float:
+        sum_: float = 0
+        for val in self:
+            sum_ += val
+        return rnd(sum_)
+
     @override
     def where(self, m: Union[AllLists, Self], for_false: any = -1) -> Self:
         """
