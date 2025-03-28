@@ -10,6 +10,13 @@ from useful_utility.errors import *
 def test_init():
     assert Matrix([[1, 2], [1, 2]], 2, 2) == Matrix([[1, 2], [1, 2]], 2, 2)
     assert Matrix([[1, 2], [1, 2]], 2, 2) == np.array([[1, 2], [1, 2]])
+    assert Matrix(rows=5, columns=5, default_value=1) == np.array([
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1]
+    ])
 
     with pytest.raises(ArgumentError):
         Matrix("a")

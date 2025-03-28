@@ -170,7 +170,7 @@ class Matrix:
         __iter__():
             The class is iterable.
     """
-    def __init__(self, data: list = None, rows: Int = 2, columns: Int = 2):
+    def __init__(self, data: Lists = None, rows: Int = 2, columns: Int = 2, default_value: Number = 0):
         """
         Creates a 2D Matrix.
 
@@ -180,10 +180,11 @@ class Matrix:
             data (list): A 2D array which holds the components
             columns (int): the number of columns (default 2; If none are given, columns = len(data[0]))
             rows (int): the number of rows (default 2; If none are given, rows = len(data))
+            default_value (Number): If no data is given, this value will be used as placeholder. default = 0
         """
         default_data: bool = False
         if data is None:
-            data = np.zeros(shape=(2, 2))
+            data: np.ndarray = np.full((2, 2), default_value)
             default_data = True
         assertion.assert_types(rows, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
         assertion.assert_types(columns, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
@@ -228,7 +229,7 @@ class Matrix:
 
         self._data = np.array(data)
         if default_data and (rows != 2 or columns != 2):
-            self._data = np.zeros(shape=(self._rows, self._columns))
+            self._data = np.full((self._rows, self._columns), default_value)
 
     def get_rows(self) -> int:
         return self._rows
