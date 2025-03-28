@@ -251,18 +251,21 @@ class Vector(Matrix):
 
         return int(np.random.choice(len(probs), p=scaled_probs))
 
+    @override
     def max(self) -> float:
         max_: float = float(self[0])
         for val in self:
             max_ = max(max_, float(val))
         return float(max_)
 
+    @override
     def min(self) -> float:
         min_: float = float(self[0])
         for val in self:
             min_ = min(min_, float(val))
         return float(min_)
 
+    @override
     def sum(self) -> float:
         sum_: float = 0
         for val in self:

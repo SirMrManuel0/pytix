@@ -338,6 +338,93 @@ class Matrix:
 
         return result
 
+    def max_in_column(self, column: Int) -> float:
+        assertion.assert_types(column, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
+        assertion.assert_range(column, 0, self.get_columns()-1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+
+        max_: float = float(self[0][column])
+        for i in range(self.get_rows()):
+            max_: float = max(max_, float(self[i][column]))
+
+        return float(max_)
+
+    def min_in_column(self, column: Int) -> float:
+        assertion.assert_types(column, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
+        assertion.assert_range(column, 0, self.get_columns()-1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+
+        min_: float = float(self[0][column])
+        for i in range(self.get_rows()):
+            min_: float = min(min_, float(self[i][column]))
+
+        return float(min_)
+
+    def sum_in_column(self, column: Int) -> float:
+        assertion.assert_types(column, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
+        assertion.assert_range(column, 0, self.get_columns() - 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+
+        sum_: float = 0
+        for i in range(self.get_rows()):
+            sum_ += float(self[i][column])
+
+        return rnd(sum_)
+
+    def max_in_row(self, row: Int) -> float:
+        assertion.assert_types(row, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
+        assertion.assert_range(row, 0, self.get_rows()-1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+
+        max_: float = float(self[row][0])
+        for i in range(self.get_columns()):
+            max_: float = max(max_, float(self[row][i]))
+
+        return float(max_)
+
+    def min_in_row(self, row: Int) -> float:
+        assertion.assert_types(row, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
+        assertion.assert_range(row, 0, self.get_rows()-1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+
+        min_: float = float(self[row][0])
+        for i in range(self.get_columns()):
+            min_: float = min(min_, float(self[row][i]))
+
+        return float(min_)
+
+    def sum_in_row(self, row: Int) -> float:
+        assertion.assert_types(row, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
+        assertion.assert_range(row, 0, self.get_rows()-1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+
+        sum_: float = 0
+        for i in range(self.get_columns()):
+            sum_ += float(self[row][i])
+
+        return rnd(sum_)
+
+    def max(self) -> float:
+        max_: float = float(self[0][0])
+
+        for i in range(self.get_rows()):
+            for j in range(self.get_columns()):
+                max_: float = max(max_, float(self[i][j]))
+
+        return float(max_)
+
+    def min(self) -> float:
+        min_: float = float(self[0][0])
+
+        for i in range(self.get_rows()):
+            for j in range(self.get_columns()):
+                min_: float = min(min_, float(self[i][j]))
+
+        return float(min_)
+
+    def sum(self) -> float:
+        sum_: float = 0
+
+        for i in range(self.get_rows()):
+            for j in range(self.get_columns()):
+                sum_ += float(self[i][j])
+
+        return rnd(sum_)
+
     @classmethod
     def create_identity_matrix(cls, n: int = 2) -> Self:
         """

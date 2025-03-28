@@ -241,3 +241,39 @@ def test_where():
     assert m.where(allowed_n) == expected
     allowed: Matrix = Matrix(allowed_n)
     assert m.where(allowed) == expected
+
+def test_max_in_column():
+    m: Matrix = Matrix([[1, 2], [3, 4]])
+    assert m.max_in_column(1) == 4
+
+def test_min_in_column():
+    m: Matrix = Matrix([[1, 2], [3, 4]])
+    assert m.min_in_column(0) == 1
+
+def test_max_in_row():
+    m: Matrix = Matrix([[1, 2], [3, 4]])
+    assert m.max_in_row(0) == 2
+
+def test_min_in_row():
+    m: Matrix = Matrix([[1, 2], [3, 4]])
+    assert m.min_in_row(1) == 3
+
+def test_sum_in_column():
+    m: Matrix = Matrix([[1, 2], [3, 4]])
+    assert m.sum_in_column(1) == 6
+
+def test_sum_in_row():
+    m: Matrix = Matrix([[1, 2], [3, 4]])
+    assert m.sum_in_row(0) == 3
+
+def test_max():
+    m: Matrix = Matrix([[1, 2], [3, 4]])
+    assert m.max() == 4
+
+def test_min():
+    m: Matrix = Matrix([[1, 2], [3, 4]])
+    assert m.min() == 1
+
+def test_sum():
+    m: Matrix = Matrix([[1, 2], [3, 4]])
+    assert m.sum() == 10
