@@ -83,3 +83,25 @@ print(m.where(allowed))
 ```title="output"
 [-1 2]
 ```
+
+## rand_choice
+***
+Returns the index of a randomly chosen element of the list.
+
+Renvoie l'indice d'un élément de la liste choisi au hasard.
+
+- if heat = -1: Chooses nearly always the max
+- if heat =  0: Uses the probability.
+- if heat =  1: Randomises the choice even more.
+
+Example:
+```python
+from useful_utility.algebra import Vector
+
+m: Vector = Vector([.3, .4, .3])
+
+print(m.rand_choice())
+```
+```title="output"
+1
+```

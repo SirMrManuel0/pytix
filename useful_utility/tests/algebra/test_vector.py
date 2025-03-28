@@ -110,3 +110,10 @@ def test_where():
     allowed: Vector = Vector(allowed_n)
     assert m.where(allowed) == expected
 
+def test_rand_choice():
+    v: Vector = Vector([0.5, .6, .03, .3, .4])
+    assert 0 <= v.rand_choice() <= 4 and isinstance(v.rand_choice(), int)
+    assert 0 <= v.rand_choice(-1) <= 4
+    assert 0 <= v.rand_choice(1) <= 4
+    assert 0 <= v.rand_choice(.1) <= 4
+    assert 0 <= v.rand_choice(-.1) <= 4

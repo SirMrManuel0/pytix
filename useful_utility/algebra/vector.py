@@ -1,5 +1,5 @@
 from typing import override, Self, Union
-
+import math
 import numpy as np
 
 from useful_utility.errors import ArgumentError, MathError, assertion
@@ -201,25 +201,75 @@ class Vector(Matrix):
             total += entry[0] * entry[0]
         return rnd(total ** (1/2))
 
+    def rand_choice(self, heat: Number = 0) -> int:
+        """
+        Returns the index of a randomly chosen element of the list.
+
+        Renvoie l'indice d'un élément de la liste choisi au hasard.
+
+        - if heat = -1: Chooses nearly always the max
+        - if heat =  0: Uses the probability.
+        - if heat =  1: Randomises the choice even more.
+
+        Args:
+            heat (Number): Changes the selection procedure.
+
+        Returns:
+            index of choice (int): The chosen Elements index.
+
+        Raises:
+            ArgumentError: If heat is not a number.
+            ArgumentError: If heat is not in [-1; 1].
+        """
+        assertion.assert_types(heat, TypesTuple.NUMBER.value, ArgumentError, code=ArgumentCodes.NOT_NUMBER)
+        assertion.assert_range(heat, -1, 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+        heat = float(heat)
+        heat = np.clip(heat, -1, 1)
+        probs = self.get_data()
+
+        normalise = False
+
+        for value in probs:
+            if value >= 1:
+                normalise: bool = True
+                break
+
+        if normalise or sum(list(probs)) != 1:
+            sum_ = sum(list(probs))
+            for i in range(len(probs)):
+                probs[i] = rnd(float(probs[i] / sum_))
+
+        if heat == -1:
+            return int(np.argmax(probs))
+        elif heat == 0:
+            return int(np.random.choice(len(probs), p=probs))
+
+        temp = 1 / (1 - heat) if heat < 0 else 1 + 4 * heat
+
+        scaled_probs = np.exp(np.log(probs + 1e-9) / temp)
+        scaled_probs /= np.sum(scaled_probs)
+
+        return int(np.random.choice(len(probs), p=scaled_probs))
+
     @override
     def where(self, m: Union[AllLists, Self], for_false: any = -1) -> Self:
         """
-            Creates a vector whose values are defined by the arg vector / list, which allows the values from self at a position.
+        Creates a vector whose values are defined by the arg vector / list, which allows the values from self at a position.
 
-            Crée un vecteur dont les valeurs sont définies par l'arg Vecteur, qui autorise les valeurs de self à une position.
+        Crée un vecteur dont les valeurs sont définies par l'arg Vecteur, qui autorise les valeurs de self à une position.
 
-            Args:
-                m (Union[AllLists, Self]): The vector / list which allows
-                for_false (any): default = -1. The value for non allowed values.
+        Args:
+            m (Union[AllLists, Self]): The vector / list which allows
+            for_false (any): default = -1. The value for non allowed values.
 
-            Returns:
-                Allowed vector (Vector): The vector with only allowed values.
+        Returns:
+            Allowed vector (Vector): The vector with only allowed values.
 
-            Raises:
-                ArgumentError: If m is not a vector / list
-                ArgumentError: If m has not the same dimensions as self.
-                ArgumentError: If m has non number or boolean values.
-            """
+        Raises:
+            ArgumentError: If m is not a vector / list
+            ArgumentError: If m has not the same dimensions as self.
+            ArgumentError: If m has non number or boolean values.
+        """
         assertion.assert_types(m, (*TypesTuple.LISTS.value, *TypesTuple.TUPLE.value, Matrix), ArgumentError,
                                code=ArgumentCodes.NOT_LISTS_TUPLE)
         if isinstance(m, Matrix) and not isinstance(m, Vector):
