@@ -248,6 +248,14 @@ def test_where():
     assert m.where(allowed_n) == expected
     allowed: Matrix = Matrix(allowed_n)
     assert m.where(allowed) == expected
+    m: Matrix = Matrix([[1, 2, 3], [4, 5, 6]])
+    allowed: list = [[False, True, False], [True, False, True]]
+    expected: Matrix = Matrix([[-1, 2, -1], [4, -1, 6]])
+    assert m.where(allowed) == expected
+    allowed_n: list = [[0, 1, 0], [1, 0, 1]]
+    assert m.where(allowed_n) == expected
+    allowed: Matrix = Matrix(allowed_n)
+    assert m.where(allowed) == expected
 
 def test_max_in_column():
     m: Matrix = Matrix([[1, 2], [3, 4]])

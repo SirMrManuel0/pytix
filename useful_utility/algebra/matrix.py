@@ -320,7 +320,7 @@ class Matrix:
             m = m.get_components()
         tester: list = list()
         for i, row in enumerate(m):
-            assertion.assert_equals(len(row), self.get_rows(), ArgumentError, code=ArgumentCodes.NOT_EQUAL)
+            assertion.assert_equals(len(row), self.get_columns(), ArgumentError, code=ArgumentCodes.NOT_EQUAL)
             assertion.assert_types(row, (*TypesTuple.LISTS.value, *TypesTuple.TUPLE.value, Matrix), ArgumentError,
                                    code=ArgumentCodes.NOT_LISTS_TUPLE)
             tester.append(list())
