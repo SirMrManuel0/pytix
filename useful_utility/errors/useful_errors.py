@@ -51,6 +51,7 @@ class ArgumentCodes(Enum):
     NOT_LISTS_TUPLE: int = 19
     NOT_BOOl: int = 20
     NOT_POLYNOMIAL: int = 21
+    NOT_INT_BOOl: int = 22
 
 class ArgumentError(BaseError):
     def __init__(self, code: ArgumentCodes, msg="", wrong_argument=None, right_argument=None):

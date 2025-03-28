@@ -7,7 +7,7 @@ from useful_utility.errors import ArgumentCodes,  MathCodes, TODO, TypesTuple
 from useful_utility.errors import deprecated
 from useful_utility.algebra.matrix import Matrix
 from useful_utility.algebra.statics import rnd
-from useful_utility.types import Number, Int, Lists
+from useful_utility.types import Number, Int, Lists, AllLists
 
 
 class Vector(Matrix):
@@ -202,6 +202,47 @@ class Vector(Matrix):
         return rnd(total ** (1/2))
 
     @override
+    def where(self, m: Union[AllLists, Self], for_false: any = -1) -> Self:
+        """
+            Creates a vector whose values are defined by the arg vector / list, which allows the values from self at a position.
+
+            Crée un vecteur dont les valeurs sont définies par l'arg Vecteur, qui autorise les valeurs de self à une position.
+
+            Args:
+                m (Union[AllLists, Self]): The vector / list which allows
+                for_false (any): default = -1. The value for non allowed values.
+
+            Returns:
+                Allowed vector (Vector): The vector with only allowed values.
+
+            Raises:
+                ArgumentError: If m is not a vector / list
+                ArgumentError: If m has not the same dimensions as self.
+                ArgumentError: If m has non number or boolean values.
+            """
+        assertion.assert_types(m, (*TypesTuple.LISTS.value, *TypesTuple.TUPLE.value, Matrix), ArgumentError,
+                               code=ArgumentCodes.NOT_LISTS_TUPLE)
+        if isinstance(m, Matrix) and not isinstance(m, Vector):
+            m = m.get_components()[0]
+        if isinstance(m, Vector):
+            m = m.get_data()
+        assertion.assert_equals(len(m), self.get_dimension(), ArgumentError, code=ArgumentCodes.NOT_EQUAL)
+        tester: list = list()
+        for i, value in enumerate(m):
+            assertion.assert_types(value, (*TypesTuple.NUMBER.value, bool), ArgumentError,
+                                   code=ArgumentCodes.NOT_INT_BOOl)
+            if isinstance(value, (np.integer, np.floating)):
+                tester.append(value > 0)
+                continue
+            tester.append(bool(value))
+
+        result: Vector = Vector(dimension=self.get_dimension())
+        for i, value in enumerate(self):
+            result[i] = value if tester[i] else for_false
+
+        return result
+
+    @override
     def __add__(self, other: Matrix) -> Self:
         added: Matrix = super().__add__(other)
         return Vector.from_matrix(added)
@@ -300,4 +341,3 @@ class Vector(Matrix):
         else:
             assertion.assert_range(len(self._data) + index, 0, len(self._data) - 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
             self._data[len(self._data) + index] = [value]
-

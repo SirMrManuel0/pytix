@@ -295,6 +295,49 @@ class Matrix:
     def copy(self) -> Self:
         return Matrix(data=list(self.get_components()))
 
+    def where(self, m: Union[AllLists, Self], for_false: any = -1) -> Self:
+        """
+        Creates a matrix whose values are defined by the arg matrix / list, which allows the values from self at a position.
+
+        Crée une matrice dont les valeurs sont définies par l'arg Matrix, qui autorise les valeurs de self à une position.
+
+        Args:
+            m (Union[AllLists, Self]): The matrix / list which allows
+            for_false (any): default = -1. The value for non allowed values.
+
+        Returns:
+            Allowed matrix (Matrix): The matrix with only allowed values.
+
+        Raises:
+            ArgumentError: If m is not a matrix / list
+            ArgumentError: If m has not the same dimensions as self.
+            ArgumentError: If m has non number or boolean values.
+        """
+        assertion.assert_types(m, (*TypesTuple.LISTS.value, *TypesTuple.TUPLE.value, Matrix), ArgumentError,
+                               code=ArgumentCodes.NOT_LISTS_TUPLE)
+        if isinstance(m, Matrix):
+            m = m.get_components()
+        tester: list = list()
+        for i, row in enumerate(m):
+            assertion.assert_equals(len(row), self.get_rows(), ArgumentError, code=ArgumentCodes.NOT_EQUAL)
+            assertion.assert_types(row, (*TypesTuple.LISTS.value, *TypesTuple.TUPLE.value, Matrix), ArgumentError,
+                                   code=ArgumentCodes.NOT_LISTS_TUPLE)
+            tester.append(list())
+            for value in row:
+                assertion.assert_types(value, (*TypesTuple.NUMBER.value, bool), ArgumentError,
+                                       code=ArgumentCodes.NOT_INT_BOOl)
+                if isinstance(value, (np.integer, np.floating)):
+                    tester[i].append(value > 0)
+                    continue
+                tester[i].append(bool(value))
+
+        result: Matrix = Matrix(rows=self.get_rows(), columns=self.get_columns())
+        for i, rows in enumerate(self):
+            for j, value in enumerate(self[i]):
+                result[i][j] = value if tester[i][j] else for_false
+
+        return result
+
     @classmethod
     def create_identity_matrix(cls, n: int = 2) -> Self:
         """

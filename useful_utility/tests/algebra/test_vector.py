@@ -99,3 +99,14 @@ def test___setitem__():
     v: Vector = Vector([1, 2, 3])
     v[1] = 3
     assert v[1] == 3
+
+def test_where():
+    m: Vector = Vector([1, 2])
+    allowed: list = [False, True]
+    expected: Vector = Vector([-1, 2])
+    assert m.where(allowed) == expected
+    allowed_n: list = [0, 1]
+    assert m.where(allowed_n) == expected
+    allowed: Vector = Vector(allowed_n)
+    assert m.where(allowed) == expected
+

@@ -150,3 +150,25 @@ print(m.get_invers())
     [1, 0]
 ]
 ```
+
+## where
+***
+Creates a matrix whose values are defined by the arg matrix / list, which allows the values from self at a position.
+
+Crée une matrice dont les valeurs sont définies par l'arg Matrix, qui autorise les valeurs de self à une position.
+
+Example:
+```python
+from useful_utility.algebra import Matrix
+
+m: Matrix = Matrix([[1, 2], [3, 4]])
+allowed: Matrix = Matrix([[0, 1], [1, 0]])
+
+print(m.where(allowed))
+```
+```title="output"
+[
+    [-1, 2],
+    [3, -1]
+]
+```

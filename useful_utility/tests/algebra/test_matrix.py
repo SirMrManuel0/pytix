@@ -231,3 +231,13 @@ def test_eq():
     n: str = "A"
     b = m == n
     assert b is False
+
+def test_where():
+    m: Matrix = Matrix([[1, 2], [3, 4]])
+    allowed: list = [[False, True], [True, False]]
+    expected: Matrix = Matrix([[-1, 2], [3, -1]])
+    assert m.where(allowed) == expected
+    allowed_n: list = [[0, 1], [1, 0]]
+    assert m.where(allowed_n) == expected
+    allowed: Matrix = Matrix(allowed_n)
+    assert m.where(allowed) == expected

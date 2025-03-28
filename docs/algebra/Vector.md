@@ -64,3 +64,22 @@ print(type(Vector.from_matrix(m)))
 [1 0 0]
 <class 'useful_utility.algebra.vector.Vector'>
 ```
+
+## where
+***
+Creates a vector whose values are defined by the arg vector / list, which allows the values from self at a position.
+
+Crée un vecteur dont les valeurs sont définies par l'arg Vecteur, qui autorise les valeurs de self à une position.
+
+Example:
+```python
+from useful_utility.algebra import Vector
+
+m: Vector = Vector([1, 2])
+allowed: Vector = Vector([0, 1])
+
+print(m.where(allowed))
+```
+```title="output"
+[-1 2]
+```
