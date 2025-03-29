@@ -105,3 +105,40 @@ print(m.rand_choice())
 ```title="output"
 1
 ```
+
+## sample
+`classmethod`
+***
+
+Creates a vector of the size n with random data from the input vector.
+
+Crée un vecteur de taille n avec des données aléatoires provenant du vecteur d'entrée.
+
+```python
+from useful_utility.algebra import Vector
+
+m: Vector = Vector([1, 2, 3, 4])
+
+print(Vector.sample(m, 3))
+```
+```title="output"
+[4 3 1]
+```
+
+## randomise
+***
+
+Randomises the data of the vector n=1 amount of times.
+
+Randomise les données du vecteur n=1 nombre de fois.
+
+```python
+from useful_utility.algebra import Vector
+
+m: Vector = Vector([1, 2, 3, 4])
+m.randomise()
+print(m)
+```
+```title="output"
+[4 2 3 1]
+```

@@ -53,6 +53,7 @@ class ArgumentCodes(Enum):
     NOT_POLYNOMIAL: int = 21
     NOT_INT_BOOl: int = 22
     TOO_BIG: int = 23
+    TOO_SMALL: int = 24
 
 class ArgumentError(BaseError):
     def __init__(self, code: ArgumentCodes, msg="", wrong_argument=None, right_argument=None):

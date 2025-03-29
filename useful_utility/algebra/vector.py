@@ -1,3 +1,4 @@
+import random
 from typing import override, Self, Union
 import math
 import numpy as np
@@ -15,73 +16,6 @@ class Vector(Matrix):
         The Vector-class inherits from the Matrix class. It is a simple n-dimensional vector.
 
         La classe Vecteur hérite de la classe Matrice. Il s'agit d'un simple vecteur à n dimensions.
-
-        Methods:
-            __init__(coordinates: list, dimension: int = 2):
-                Initializes the vector with the given coordinates and dimension.
-
-            cross(vec: Vector) -> Vector:
-                Computes the cross product of the vector with another 3D vector.
-
-            from_matrix(matrix: Matrix) -> Vector:
-                Creates a vector from a single-row matrix.
-
-            get_dimension() -> int:
-                Returns the dimension of the vector.
-
-            get_component(index: int) -> float:
-                Returns the component at the specified index.
-
-            set_component(index: int, value: int | float | np.float64) -> None:
-                Sets the component at the specified index.
-
-            set_data(new: list) -> None:
-                Sets the vector data with the provided list.
-
-            get_data() -> np.ndarray:
-                Returns the vector's data as a NumPy array.
-
-            length() -> float:
-                Returns the magnitude (length) of the vector.
-
-            __add__(other: Matrix) -> Vector:
-                Adds another vector or matrix to the current vector.
-
-            __radd__(other: Matrix) -> Vector:
-                Right-hand addition for vectors or matrices.
-
-            __sub__(other: Matrix) -> Vector:
-                Subtracts another vector or matrix from the current vector.
-
-            __rsub__(other: Matrix) -> Vector:
-                Right-hand subtraction for vectors or matrices.
-
-            __mul__(other: Vector | int | float) -> Vector | float:
-                Multiplies the vector with another vector (dot product) or scalar.
-
-            __rmul__(other: Matrix | Vector | int | float) -> Vector:
-                Right-hand multiplication for vectors or scalars.
-
-            __imul__(other: Matrix | int | float) -> Vector:
-                In-place multiplication for vectors or scalars.
-
-            __truediv__(other: int | float) -> Vector:
-                Divides the vector by a scalar value.
-
-            __pow__(power, modulo=None):
-                Raises an error, as exponentiation is not defined for vectors.
-
-            __str__() -> str:
-                Returns a string representation of the vector.
-
-            __repr__() -> str:
-                Returns a detailed string representation of the vector.
-
-            copy() -> Vector:
-                Returns a copy of the vector.
-
-            __iter__():
-                Allows iteration over the vector components.
 
     """
     def __init__(self, coordinates=None, dimension: Int = 2):
@@ -164,6 +98,30 @@ class Vector(Matrix):
         for component in matrix.get_components():
             coordinates.append(component[0])
         return Vector(coordinates, len(coordinates))
+
+    @classmethod
+    def sample(cls, vec: Self, len_output: int) -> Self:
+        """
+        Creates a vector of the size n with random data from the input vector.
+
+        Crée un vecteur de taille n avec des données aléatoires provenant du vecteur d'entrée.
+
+        Args:
+            vec (Vector): The vector from which you want a sample.
+            len_output (int): The length of the sample.
+
+        Raises:
+            ArgumentError: If `vec` is not of type Vector.
+            ArgumentError: If `len_output` is not inz.
+            ArgumentError: If `len_output` is smaller 1.
+
+        Returns:
+            Vector: The resulting vector from the sample.
+        """
+        assertion.assert_type(vec, Vector, ArgumentError, code=ArgumentCodes.NOT_VECTOR)
+        assertion.assert_types(len_output, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
+        assertion.assert_above(len_output, 0, ArgumentError, code=ArgumentCodes.TOO_SMALL)
+        return Vector(random.sample(list(vec.get_data()), len_output))
 
     @override
     def get_dimension(self) -> int:
@@ -312,6 +270,27 @@ class Vector(Matrix):
             result[i] = value if tester[i] else for_false
 
         return result
+
+    def randomise(self, amount_of_randomising: int = 1) -> None:
+        """
+        Randomises the data of the vector n=1 amount of times.
+
+        Randomise les données du vecteur n=1 nombre de fois.
+
+        Args:
+            amount_of_randomising (int): The amount of times the randomise function should be applied.
+
+        Raises:
+            ArgumentError: If `amount_of_randomising` is not inz.
+            ArgumentError: If `amount_of_randomising` is smaller 1.
+
+        Returns:
+            Vector: The resulting vector from the sample.
+        """
+        assertion.assert_types(amount_of_randomising, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
+        assertion.assert_above(amount_of_randomising, 0, ArgumentError, code=ArgumentCodes.TOO_SMALL)
+        for _ in range(amount_of_randomising):
+            self.set_data(random.sample(list(self.get_data()), len(self._data)))
 
     @override
     def __add__(self, other: Matrix) -> Self:

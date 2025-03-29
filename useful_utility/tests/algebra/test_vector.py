@@ -129,3 +129,13 @@ def test_min():
 def test_sum():
     v: Vector = Vector([1, 2, 3, 5])
     assert v.sum() == 11
+
+def test_randomise():
+    v: Vector = Vector([1, 2, 3, 5])
+    v.randomise()
+    v.randomise(5)
+
+def test_sample():
+    v: Vector = Vector([1, 2, 3, 5])
+    b: Vector = Vector.sample(v, 3)
+    assert b.get_dimension() == 3
