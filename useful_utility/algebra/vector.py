@@ -1,7 +1,8 @@
 import random
-from typing import override, Self, Union
-import math
 import numpy as np
+
+from typing import override, Self, Union, Optional
+from collections.abc import Iterable
 
 from useful_utility.errors import ArgumentError, MathError, assertion
 from useful_utility.errors import ArgumentCodes,  MathCodes, TODO, TypesTuple
@@ -18,7 +19,7 @@ class Vector(Matrix):
         La classe Vecteur hérite de la classe Matrice. Il s'agit d'un simple vecteur à n dimensions.
 
     """
-    def __init__(self, coordinates=None, dimension: Int = 2):
+    def __init__(self, coordinates: Optional[Iterable] = None, dimension: Int = 2):
         """
         Creates a vector.
 
@@ -36,8 +37,7 @@ class Vector(Matrix):
             coordinates: list = [0 for _ in range(dimension)]
         if isinstance(coordinates, tuple):
             coordinates = list(coordinates)
-        assertion.assert_types(coordinates, TypesTuple.LISTS.value, ArgumentError,
-                               code=ArgumentCodes.NOT_LISTS)
+        assertion.assert_types(coordinates, TypesTuple.LISTS.value, ArgumentError, code=ArgumentCodes.NOT_LISTS)
         for coord in coordinates:
             if isinstance(coord, TypesTuple.NUMBER.value):
                 d.append([coord])
