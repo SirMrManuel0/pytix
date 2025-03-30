@@ -1,5 +1,6 @@
-from typing import Self
 import numpy as np
+
+from typing import Self
 
 from useful_utility.algebra.statics import rnd
 from useful_utility.types import AllLists, Int, Number
@@ -46,10 +47,10 @@ class Polynomial(Equation):
         if degree == 0:
             assertion.assert_below(len(parameters), 2, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
         else:
-            assertion.assert_range(len(parameters), 1, degree + 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
+            assertion.assert_range(len(parameters), 1, abs(degree) + 1, ArgumentError, code=ArgumentCodes.OUT_OF_RANGE)
         assertion.assert_type(integrate_derive, bool, ArgumentError, code=ArgumentCodes.NOT_BOOl)
         parameters = list(parameters)
-        while len(parameters) < degree + 1:
+        while len(parameters) < abs(degree) + 1:
             parameters.append(0)
 
         super().__init__(self.generate_polynome(degree, parameters), parameters)
@@ -77,9 +78,11 @@ class Polynomial(Equation):
                                code=ArgumentCodes.NOT_LISTS_TUPLE)
         assertion.assert_types_list(parameters, TypesTuple.NUMBER.value, ArgumentError, code=ArgumentCodes.NOT_NUMBER)
 
+        abs_degree: int = abs(degree)
+
         equation: str = ""
-        for power in range(degree, -1, -1):
-            index: int = int(degree - power)
+        for power in range(abs_degree, -1, -1):
+            index: int = int(abs_degree - power)
             if index == len(parameters):
                 break
             if parameters[index] == 0:
@@ -90,17 +93,29 @@ class Polynomial(Equation):
                 else:
                     equation += f" + {parameters[index]}"
                 continue
-            elif power == 1:
-                if not equation:
-                    equation += f"{parameters[index]} * x"
-                else:
-                    equation += f" + {parameters[index]} * x"
-                continue
+            if degree > 0:
+                if power == 1:
+                    if not equation:
+                        equation += f"{parameters[index]} * x"
+                    else:
+                        equation += f" + {parameters[index]} * x"
+                    continue
 
-            if not equation:
-                equation += f"{parameters[index]} * x**{power}"
+                if not equation:
+                    equation += f"{parameters[index]} * x**{power}"
+                else:
+                    equation += f" + {parameters[index]} * x**{power}"
             else:
-                equation += f" + {parameters[index]} * x**{power}"
+                if power == 1:
+                    if not equation:
+                        equation += f"{parameters[index]} / x"
+                    else:
+                        equation += f" + {parameters[index]} / x"
+                    continue
+                if not equation:
+                    equation += f"{parameters[index]} / x**{power}"
+                else:
+                    equation += f" + {parameters[index]} / x**{power}"
         return equation
 
     def get_degree(self) -> int:
