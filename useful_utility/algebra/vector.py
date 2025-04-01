@@ -45,7 +45,7 @@ class Vector(Matrix):
                 d.append([coord[0]])
             else:
                 raise ArgumentError(ArgumentCodes.UNEXPECTED_TYPE, wrong_argument=type(coord))
-        super().__init__(d, dimension, 1)
+        super().__init__(data=d, rows=dimension, columns=1)
 
     def cross(self, vec: Self) -> Self:
         """

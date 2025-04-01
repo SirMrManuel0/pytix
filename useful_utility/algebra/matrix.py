@@ -578,7 +578,7 @@ class Matrix:
             raise MathError(MathCodes.UNFIT_DIMENSIONS, "The dimensions of the matrices do not fit!", other)
         matrixA = self.get_components()
         matrixB = other.get_components()
-        return Matrix(list(matrixA + matrixB), self._columns, self._rows)
+        return Matrix(data=list(matrixA + matrixB), rows=self._rows, columns=self._columns)
 
     def __radd__(self, other: Self) -> Self:
         return self.__add__(other)

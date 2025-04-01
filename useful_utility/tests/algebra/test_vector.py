@@ -21,6 +21,7 @@ def test_add():
     assert Vector((1, 1)) + Vector((1, 1)) == Vector((2, 2))
     assert Vector((0, -1)) + Vector((5, -3)) == Vector((5, -4))
     assert Vector((1, 1)) + Vector((1, 0)) == Vector((2, 1))
+    assert Vector((1, 2, 3)) + Vector((3, 2, 1)) == Vector((4, 4, 4))
     with pytest.raises(MathError):
         Vector((1, 1)) + "5"
 
