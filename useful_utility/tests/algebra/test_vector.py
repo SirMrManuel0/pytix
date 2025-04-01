@@ -5,6 +5,8 @@ from useful_utility.errors import ArgumentError, MathError
 
 def test_init():
     Vector((5, 5, 5))
+    v: Vector = Vector(dimension=2, default_value=-1)
+    assert v == Vector([-1, -1])
     with pytest.raises(ArgumentError):
         Vector()
         Vector((5, None))

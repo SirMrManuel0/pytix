@@ -19,22 +19,23 @@ class Vector(Matrix):
         La classe Vecteur hérite de la classe Matrice. Il s'agit d'un simple vecteur à n dimensions.
 
     """
-    def __init__(self, coordinates: Optional[Iterable] = None, dimension: Int = 2):
+    def __init__(self, coordinates: Optional[Iterable] = None, dimension: Int = 2, default_value: Number = 0):
         """
         Creates a vector.
 
         Crée un vecteur.
 
         Args:
-            coordinates (list): A list of the coordinates for the vector.
+            coordinates (Optional[Iterable]): A list of the coordinates for the vector.
             dimension (int): The dimension of the vector. (default 2; or len(coordinates))
+            default_value (Number): The value which will be used, if coordinates is None.
         """
         assertion.assert_types(dimension, TypesTuple.INT.value, ArgumentError, code=ArgumentCodes.NOT_INT)
         assertion.assert_is_positiv(dimension, ArgumentError, code=ArgumentCodes.NOT_POSITIV)
         assertion.assert_not_zero(dimension, ArgumentError, code=ArgumentCodes.ZERO)
         d: list = list()
         if coordinates is None:
-            coordinates: list = [0 for _ in range(dimension)]
+            coordinates: list = [default_value for _ in range(dimension)]
         if isinstance(coordinates, tuple):
             coordinates = list(coordinates)
         assertion.assert_types(coordinates, TypesTuple.LISTS.value, ArgumentError, code=ArgumentCodes.NOT_LISTS)
