@@ -2,6 +2,7 @@ import math
 
 import pytest
 import numpy as np
+
 from pylix.algebra import Matrix, Vector, Axis
 from pylix.algebra.statics import rnd
 from pylix.errors import *
