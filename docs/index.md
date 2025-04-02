@@ -1,7 +1,7 @@
-# Welcome to useful_utility
+# Welcome to pytix
 
 ## Get Started 
 
 ```shell
-pip install git+https://github.com/SirMrManuel0/usefull_utility_py.git
+pip install git+https://github.com/SirMrManuel0/pytix.git
 ```
