@@ -3,8 +3,8 @@ from typing import Union
 
 import numpy as np
 
-from useful_utility.errors.error_messages import *
-from useful_utility.errors.enums import *
+from pytix.errors.error_messages import *
+from pytix.errors.enums import *
 
 class BaseError(Exception):
     def __init__(self, code, msg="", wrong=None, right=None, err: str = "Error"):

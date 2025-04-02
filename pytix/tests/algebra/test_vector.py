@@ -1,7 +1,7 @@
 import pytest
-from useful_utility.algebra.vector import Vector
-from useful_utility.algebra.statics import rnd
-from useful_utility.errors import ArgumentError, MathError
+from pytix.algebra.vector import Vector
+from pytix.algebra.statics import rnd
+from pytix.errors import ArgumentError, MathError
 
 def test_init():
     Vector((5, 5, 5))

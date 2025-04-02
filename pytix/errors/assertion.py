@@ -1,4 +1,4 @@
-from useful_utility.errors import ArgumentError, MathError, BaseError
+from pytix.errors import ArgumentError, MathError, BaseError
 
 
 def _edit_kwargs(wrong, kwargs: dict, exception) -> dict:

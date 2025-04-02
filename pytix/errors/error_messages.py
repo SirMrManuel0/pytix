@@ -1,4 +1,4 @@
-from useful_utility.errors.enums import ArgumentCodes, MathCodes, BaseCodes, TypesTuple
+from pytix.errors.enums import ArgumentCodes, MathCodes, BaseCodes, TypesTuple
 
 
 ARGUMENT_ERROR_MESSAGES: dict = {

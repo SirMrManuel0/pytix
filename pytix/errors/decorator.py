@@ -2,7 +2,7 @@ import sys
 import functools
 import warnings
 
-from useful_utility.errors import BaseError, BaseCodes
+from pytix.errors import BaseError, BaseCodes
 
 if hasattr(functools, "deprecated"):
     deprecated = functools.deprecated  # Use built-in in Python 3.13+

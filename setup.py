@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="useful_utility",
-    version="0.1.16",
+    name="pytix",
+    version="0.1.17",
     packages=find_packages(),
     install_requires=["colorama", "iniconfig", "numpy", "packaging", "pluggy", "pytest", "setuptools"],
     long_description=open('README.md').read(),

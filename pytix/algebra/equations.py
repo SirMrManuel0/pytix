@@ -2,9 +2,9 @@ import numpy as np
 
 from typing import Self
 
-from useful_utility.algebra.statics import rnd
-from useful_utility.types import AllLists, Int, Number
-from useful_utility.errors import assertion, ArgumentError, MathError, ArgumentCodes, MathCodes, TypesTuple, StateError
+from pytix.algebra.statics import rnd
+from pytix.types import AllLists, Int, Number
+from pytix.errors import assertion, ArgumentError, MathError, ArgumentCodes, MathCodes, TypesTuple, StateError
 
 class Equation:
     """

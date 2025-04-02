@@ -8,8 +8,9 @@ Une classe qui représente une matrice mathématique. Elle a différentes métho
 Examples:
 
 Access Components:
+
 ```python
-from useful_utility.algebra import Matrix
+from pytix.algebra import Matrix
 
 m: Matrix = Matrix([[1, 2], [3, 4]])
 
@@ -23,8 +24,9 @@ print(m[-1][-1])
 
 
 Equal:
+
 ```python
-from useful_utility.algebra import Matrix
+from pytix.algebra import Matrix
 
 m: Matrix = Matrix([[1, 2], [3, 4]])
 n: Matrix = Matrix([[1, 2], [3, 4]])
@@ -39,7 +41,7 @@ True
 Addition:
 
 ```python
-from useful_utility.algebra import Matrix
+from pytix.algebra import Matrix
 
 m: Matrix = Matrix([[1, 2], [3, 4]])
 
@@ -64,8 +66,9 @@ Crée une matrice unité.
 default n = 2
 
 Example:
+
 ```python
-from useful_utility.algebra import Matrix
+from pytix.algebra import Matrix
 
 print(Matrix.create_identity_matrix(2))
 ```
@@ -84,8 +87,9 @@ Creates a rotation matrix (counterclockwise) for a 2D vector.
 Crée une matrice de rotation (anti-horaire) pour un 2D vecteur.
 
 Example:
+
 ```python
-from useful_utility.algebra import Matrix
+from pytix.algebra import Matrix
 
 print(Matrix.create_rotation_matrix_2D(90))
 ```
@@ -104,8 +108,9 @@ Creates a rotation matrix (counterclockwise) for a 3D vector.
 Crée une matrice de rotation (anti-horaire) pour un 3D vecteur.
 
 An Axis needs to be given:
+
 ```python
-from useful_utility.algebra import Axis
+from pytix.algebra import Axis
 
 Axis.X
 Axis.Y
@@ -113,8 +118,9 @@ Axis.Z
 ```
 
 Example:
+
 ```python
-from useful_utility.algebra import Matrix, Axis
+from pytix.algebra import Matrix, Axis
 
 print(Matrix.create_rotation_matrix_3D(90, Axis.X))
 ```
@@ -137,8 +143,9 @@ Crée une matrice inverse pour la matrice.
 (only for quadratic matrices)
 
 Example:
+
 ```python
-from useful_utility.algebra import Matrix
+from pytix.algebra import Matrix
 
 m: Matrix = Matrix([[0, 1], [1, 0]])
 
@@ -158,8 +165,9 @@ Creates a matrix whose values are defined by the arg matrix / list, which allows
 Crée une matrice dont les valeurs sont définies par l'arg Matrix, qui autorise les valeurs de self à une position.
 
 Example:
+
 ```python
-from useful_utility.algebra import Matrix
+from pytix.algebra import Matrix
 
 m: Matrix = Matrix([[1, 2], [3, 4]])
 allowed: Matrix = Matrix([[0, 1], [1, 0]])
