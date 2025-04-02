@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="pytix",
+    name="pylix",
     version="0.1.17",
     packages=find_packages(),
     install_requires=["colorama", "iniconfig", "numpy", "packaging", "pluggy", "pytest", "setuptools"],

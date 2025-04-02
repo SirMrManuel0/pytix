@@ -4,10 +4,10 @@ from enum import Enum
 
 import numpy as np
 
-from pytix.errors import deprecated
-from pytix.algebra.statics import rnd
-from pytix.errors import ArgumentError, MathError, ArgumentCodes, assertion, MathCodes, TypesTuple
-from pytix.types import Number, Int, Lists, AllLists
+from pylix.errors import deprecated
+from pylix.algebra.statics import rnd
+from pylix.errors import ArgumentError, MathError, ArgumentCodes, assertion, MathCodes, TypesTuple
+from pylix.types import Number, Int, Lists, AllLists
 
 def add_matrix(A, B):
     return [[A[i][j] + B[i][j] for j in range(len(A))] for i in range(len(A))]

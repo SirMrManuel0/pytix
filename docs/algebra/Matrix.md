@@ -10,7 +10,7 @@ Examples:
 Access Components:
 
 ```python
-from pytix.algebra import Matrix
+from pylix.algebra import Matrix
 
 m: Matrix = Matrix([[1, 2], [3, 4]])
 
@@ -26,7 +26,7 @@ print(m[-1][-1])
 Equal:
 
 ```python
-from pytix.algebra import Matrix
+from pylix.algebra import Matrix
 
 m: Matrix = Matrix([[1, 2], [3, 4]])
 n: Matrix = Matrix([[1, 2], [3, 4]])
@@ -41,7 +41,7 @@ True
 Addition:
 
 ```python
-from pytix.algebra import Matrix
+from pylix.algebra import Matrix
 
 m: Matrix = Matrix([[1, 2], [3, 4]])
 
@@ -68,7 +68,7 @@ default n = 2
 Example:
 
 ```python
-from pytix.algebra import Matrix
+from pylix.algebra import Matrix
 
 print(Matrix.create_identity_matrix(2))
 ```
@@ -89,7 +89,7 @@ Crée une matrice de rotation (anti-horaire) pour un 2D vecteur.
 Example:
 
 ```python
-from pytix.algebra import Matrix
+from pylix.algebra import Matrix
 
 print(Matrix.create_rotation_matrix_2D(90))
 ```
@@ -110,7 +110,7 @@ Crée une matrice de rotation (anti-horaire) pour un 3D vecteur.
 An Axis needs to be given:
 
 ```python
-from pytix.algebra import Axis
+from pylix.algebra import Axis
 
 Axis.X
 Axis.Y
@@ -120,7 +120,7 @@ Axis.Z
 Example:
 
 ```python
-from pytix.algebra import Matrix, Axis
+from pylix.algebra import Matrix, Axis
 
 print(Matrix.create_rotation_matrix_3D(90, Axis.X))
 ```
@@ -145,7 +145,7 @@ Crée une matrice inverse pour la matrice.
 Example:
 
 ```python
-from pytix.algebra import Matrix
+from pylix.algebra import Matrix
 
 m: Matrix = Matrix([[0, 1], [1, 0]])
 
@@ -167,7 +167,7 @@ Crée une matrice dont les valeurs sont définies par l'arg Matrix, qui autorise
 Example:
 
 ```python
-from pytix.algebra import Matrix
+from pylix.algebra import Matrix
 
 m: Matrix = Matrix([[1, 2], [3, 4]])
 allowed: Matrix = Matrix([[0, 1], [1, 0]])

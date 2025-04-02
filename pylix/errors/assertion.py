@@ -1,4 +1,4 @@
-from pytix.errors import ArgumentError, MathError, BaseError
+from pylix.errors import ArgumentError, MathError, BaseError
 
 
 def _edit_kwargs(wrong, kwargs: dict, exception) -> dict:

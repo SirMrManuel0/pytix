@@ -2,9 +2,9 @@ import math
 
 import pytest
 import numpy as np
-from pytix.algebra import Matrix, Vector, Axis
-from pytix.algebra.statics import rnd
-from pytix.errors import *
+from pylix.algebra import Matrix, Vector, Axis
+from pylix.algebra.statics import rnd
+from pylix.errors import *
 
 
 def test_init():

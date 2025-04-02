@@ -1,7 +1,7 @@
 import pytest
 
-from pytix.errors import ArgumentError, StateError, MathError
-from pytix.algebra import Polynomial
+from pylix.errors import ArgumentError, StateError, MathError
+from pylix.algebra import Polynomial
 
 def test___init__():
     p: Polynomial = Polynomial(2, [2, 0, 1])

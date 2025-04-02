@@ -1,2 +1,2 @@
 Documentation:
-https://sirmrmanuel0.github.io/pytix/
+https://sirmrmanuel0.github.io/pylix/

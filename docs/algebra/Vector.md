@@ -7,7 +7,7 @@ La classe Vecteur hérite de la classe Matrice. Il s'agit d'un simple vecteur à
 Examples:
 
 ```python
-from pytix.algebra import Vector
+from pylix.algebra import Vector
 
 v: Vector = Vector([1, 2, 3])
 
@@ -33,7 +33,7 @@ Calcule le produit vectoriel de 2 vecteurs.
 Example:
 
 ```python
-from pytix.algebra import Vector
+from pylix.algebra import Vector
 
 v1: Vector = Vector([1, 0, 0])
 v2: Vector = Vector([0, 1, 0])
@@ -56,7 +56,7 @@ Transforme une matrice en un vecteur.
 Example:
 
 ```python
-from pytix.algebra import Matrix, Vector
+from pylix.algebra import Matrix, Vector
 
 m: Matrix = Matrix([[1], [0], [0]])
 
@@ -77,7 +77,7 @@ Crée un vecteur dont les valeurs sont définies par l'arg Vecteur, qui autorise
 Example:
 
 ```python
-from pytix.algebra import Vector
+from pylix.algebra import Vector
 
 m: Vector = Vector([1, 2])
 allowed: Vector = Vector([0, 1])
@@ -101,7 +101,7 @@ Renvoie l'indice d'un élément de la liste choisi au hasard.
 Example:
 
 ```python
-from pytix.algebra import Vector
+from pylix.algebra import Vector
 
 m: Vector = Vector([.3, .4, .3])
 
@@ -120,7 +120,7 @@ Creates a vector of the size n with random data from the input vector.
 Crée un vecteur de taille n avec des données aléatoires provenant du vecteur d'entrée.
 
 ```python
-from pytix.algebra import Vector
+from pylix.algebra import Vector
 
 m: Vector = Vector([1, 2, 3, 4])
 
@@ -138,7 +138,7 @@ Randomises the data of the vector n=1 amount of times.
 Randomise les données du vecteur n=1 nombre de fois.
 
 ```python
-from pytix.algebra import Vector
+from pylix.algebra import Vector
 
 m: Vector = Vector([1, 2, 3, 4])
 m.randomise()

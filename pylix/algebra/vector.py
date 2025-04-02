@@ -4,12 +4,12 @@ import numpy as np
 from typing import override, Self, Union, Optional
 from collections.abc import Iterable
 
-from pytix.errors import ArgumentError, MathError, assertion
-from pytix.errors import ArgumentCodes,  MathCodes, TODO, TypesTuple
-from pytix.errors import deprecated
-from pytix.algebra.matrix import Matrix
-from pytix.algebra.statics import rnd
-from pytix.types import Number, Int, Lists, AllLists
+from pylix.errors import ArgumentError, MathError, assertion
+from pylix.errors import ArgumentCodes,  MathCodes, TODO, TypesTuple
+from pylix.errors import deprecated
+from pylix.algebra.matrix import Matrix
+from pylix.algebra.statics import rnd
+from pylix.types import Number, Int, Lists, AllLists
 
 
 class Vector(Matrix):

@@ -1,5 +1,5 @@
-site_name: pytix
-site_url: https://sirmrmanuel0.github.io/pytix/
+site_name: pylix
+site_url: https://sirmrmanuel0.github.io/pylix/
 theme:
   name: material
   features:

@@ -1,7 +1,7 @@
 import pytest
-from pytix.algebra.vector import Vector
-from pytix.algebra.statics import rnd
-from pytix.errors import ArgumentError, MathError
+from pylix.algebra.vector import Vector
+from pylix.algebra.statics import rnd
+from pylix.errors import ArgumentError, MathError
 
 def test_init():
     Vector((5, 5, 5))

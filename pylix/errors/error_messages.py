@@ -1,4 +1,4 @@
-from pytix.errors.enums import ArgumentCodes, MathCodes, BaseCodes, TypesTuple
+from pylix.errors.enums import ArgumentCodes, MathCodes, BaseCodes, TypesTuple
 
 
 ARGUMENT_ERROR_MESSAGES: dict = {
@@ -21,7 +21,7 @@ ARGUMENT_ERROR_MESSAGES: dict = {
     ArgumentCodes.LIST_LAYER_NOT_NUMBER_LISTS:
         f"The given value was neither a number nor a list as defined for: {(*TypesTuple.NUMBER.value, *TypesTuple.LISTS.value)}.",
     ArgumentCodes.NOT_MATRIX_NP_ARRAY:
-        f"The argument was not an instance of useful_utility.algebra.Matrix or numpy.ndarray.",
+        f"The argument was not an instance of pylix.algebra.Matrix or numpy.ndarray.",
     ArgumentCodes.NOT_EQUAL:
         f"The given value was not equal to some metric.",
     ArgumentCodes.MISMATCH_DIMENSION:
@@ -33,17 +33,17 @@ ARGUMENT_ERROR_MESSAGES: dict = {
     ArgumentCodes.UNEXPECTED_TYPE:
         f"The given argument was of a not expected type.",
     ArgumentCodes.NOT_AXIS:
-        f"The argument was expected to be a useful_utility.algebra.AXIS.",
+        f"The argument was expected to be a pylix.algebra.AXIS.",
     ArgumentCodes.NOT_VECTOR3D:
         f"For this operation only 3d vectors can be used. Given argument was not one.",
     ArgumentCodes.NOT_VECTOR:
-        f"The given argument was not a useful_utility.algebra.Vector.",
+        f"The given argument was not a pylix.algebra.Vector.",
     ArgumentCodes.NOT_MATRIX:
-        f"The given argument was not a useful_utility.algebra.Matrix.",
+        f"The given argument was not a pylix.algebra.Matrix.",
     ArgumentCodes.NOT_LISTS_TUPLE:
         f"The given argument was expected to be of type {(*TypesTuple.TUPLE.value, *TypesTuple.LISTS.value)}.",
     ArgumentCodes.NOT_POLYNOMIAL:
-        f"The given argument was not a useful_utility.algebra.Polynomial",
+        f"The given argument was not a pylix.algebra.Polynomial",
     ArgumentCodes.NOT_INT_BOOl:
         f"The given argument was not in {(*TypesTuple.INT.value, bool)}",
     ArgumentCodes.TOO_BIG:
@@ -58,9 +58,9 @@ MATH_ERROR_MESSAGES: dict = {
     MathCodes.UNFIT_DIMENSIONS:
         f"For this mathematical operations the given argument does not have an acceptable dimension.",
     MathCodes.NOT_MATRIX:
-        f"The given argument for the operation was not a useful_utility.algebra.Matrix.",
+        f"The given argument for the operation was not a pylix.algebra.Matrix.",
     MathCodes.NOT_MATRIX_NUMBER:
-        f"The given argument for the operation was not a useful_utility.algebra.Matrix or {TypesTuple.NUMBER.value}.",
+        f"The given argument for the operation was not a pylix.algebra.Matrix or {TypesTuple.NUMBER.value}.",
     MathCodes.NOT_NUMBER:
         f"The type of the argument is not in {TypesTuple.NUMBER.value}.",
     MathCodes.NOT_FALSE:
@@ -70,15 +70,15 @@ MATH_ERROR_MESSAGES: dict = {
     MathCodes.NOT_INT:
         f"The value was not an integer defined as {TypesTuple.INT.value}",
     MathCodes.NOT_VECTOR:
-        f"The given value was not a useful_utility.algebra.Vector.",
+        f"The given value was not a pylix.algebra.Vector.",
     MathCodes.NOT_DEFINED:
         f"It was tried to execute an undefined operation (e.g. division by zero).",
     MathCodes.ZERO:
         f"The value is zero, but was not expected to be zero.",
     MathCodes.NOT_VECTOR_NUMBER:
-        f"The given argument for the operation was not a useful_utility.algebra.Vector or {TypesTuple.NUMBER.value}.",
+        f"The given argument for the operation was not a pylix.algebra.Vector or {TypesTuple.NUMBER.value}.",
     MathCodes.VECTOR:
-        f"The given value was a useful_utility.algebra.Vector. It was not expected to be one."
+        f"The given value was a pylix.algebra.Vector. It was not expected to be one."
 }
 
 BASE_ERROR_MESSAGES: dict = {
