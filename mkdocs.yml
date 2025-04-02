@@ -1,5 +1,5 @@
-site_name: Useful Utility
-site_url: https://sirmrmanuel0.github.io/usefull_utility_py/
+site_name: pytix
+site_url: https://sirmrmanuel0.github.io/pytix/
 theme:
   name: material
   features:
