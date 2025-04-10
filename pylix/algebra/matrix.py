@@ -599,7 +599,7 @@ class Matrix:
             raise MathError(MathCodes.UNFIT_DIMENSIONS, "The dimensions of the matrices do not fit!", other)
         matrixA = self.get_components()
         matrixB = other.get_components()
-        return Matrix(list(matrixA - matrixB), self._columns, self._rows)
+        return Matrix(list(matrixA - matrixB), columns=self._columns, rows=self._rows)
 
     def __rsub__(self, other: Self) -> Self:
         assertion.assert_type(other, Matrix, MathError, code=MathCodes.NOT_MATRIX)

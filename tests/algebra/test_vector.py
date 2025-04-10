@@ -30,6 +30,7 @@ def test_add():
 def test_sub():
     assert Vector((1, 1)) - Vector((1, 1)) == Vector((0, 0))
     assert Vector((1, 0)) - Vector((1, 1)) == Vector((0, -1))
+    assert Vector((1, 0, 0)) - Vector((1, 1, 1)) == Vector((0, -1, -1))
     with pytest.raises(MathError):
         Vector((1, 1)) - "5"
 
