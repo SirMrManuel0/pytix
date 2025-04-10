@@ -41,6 +41,7 @@ class ArgumentCodes(Enum):
     NOT_INT_BOOl: int = 22
     TOO_BIG: int = 23
     TOO_SMALL: int = 24
+    NOT_ITERABLE: int = 25
 
 class MathCodes(Enum):
     NONE: int = 0

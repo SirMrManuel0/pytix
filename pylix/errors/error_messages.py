@@ -49,7 +49,9 @@ ARGUMENT_ERROR_MESSAGES: dict = {
     ArgumentCodes.TOO_BIG:
         f"The given argument was bigger than a limit value.",
     ArgumentCodes.TOO_SMALL:
-        f"The given argument was smaller than a limit value."
+        f"The given argument was smaller than a limit value.",
+    ArgumentCodes.NOT_ITERABLE:
+        f"The given value is not an iterable."
 }
 
 MATH_ERROR_MESSAGES: dict = {

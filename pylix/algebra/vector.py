@@ -1,8 +1,7 @@
 import random
 import numpy as np
 
-from typing import override, Self, Union, Optional
-from collections.abc import Iterable
+from typing import override, Self, Union, Optional, Iterable
 
 from pylix.errors import ArgumentError, MathError, assertion
 from pylix.errors import ArgumentCodes,  MathCodes, TODO, TypesTuple
