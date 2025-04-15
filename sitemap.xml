@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://sirmrmanuel0.github.io/pylix/</loc>
+         <lastmod>2025-04-15</lastmod>
+    </url>
+    <url>
+         <loc>https://sirmrmanuel0.github.io/pylix/algebra/Matrix/</loc>
+         <lastmod>2025-04-15</lastmod>
+    </url>
+    <url>
+         <loc>https://sirmrmanuel0.github.io/pylix/algebra/Vector/</loc>
+         <lastmod>2025-04-15</lastmod>
+    </url>
+    <url>
+         <loc>https://sirmrmanuel0.github.io/pylix/algebra/statics/</loc>
+         <lastmod>2025-04-15</lastmod>
+    </url>
+    <url>
+         <loc>https://sirmrmanuel0.github.io/pylix/errors/decorator/</loc>
+         <lastmod>2025-04-15</lastmod>
+    </url>
+</urlset>
